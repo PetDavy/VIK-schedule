@@ -1,0 +1,14 @@
+version: "3"
+services:
+  api:
+    image: vik-schedule
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      FLASK_APP: /usr/src/app/startapp.py
+      FLASK_DEBUG: 1
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src/app
