@@ -3,6 +3,7 @@ from app import user
 
 from app.extentions import db
 from app.extentions import migrate
+from app.extentions import jwt
 
 
 def create_app(config_object):
@@ -10,6 +11,7 @@ def create_app(config_object):
     app.config.from_object(config_object)
     register_blueprints(app)
     register_extensions(app)
+    jwt.init_app(app)
 
     return app
 
