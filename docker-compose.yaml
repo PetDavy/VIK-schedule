@@ -10,7 +10,24 @@ services:
     environment:
       FLASK_APP: /usr/src/app/startapp.py
       FLASK_DEBUG: 1
+      SQLALCHEMY_DATABASE_URI: postgresql://admin:password@db/vik-schedule-db
     volumes:
       - type: bind
         source: ./api
         target: /usr/src/app
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_DB: vik-schedule-db
+    volumes:
+      - db-data:/var/lib/postgresql/data 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080 
+volumes:
+    db-data:
