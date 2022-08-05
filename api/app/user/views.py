@@ -26,6 +26,7 @@ def login(email, password, **kwargs):
 @marshal_with(user_schema)
 def register(username, email, password, **kwargs):
     user = User(username=username, email=email, password=password)
+    user.token = create_access_token(user)
     user.save()
     return user
 

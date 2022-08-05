@@ -23,5 +23,16 @@ class Student(db.Model):
             user=user
         )
 
+    def update_student(self, **kwargs):
+        for key, value in kwargs.items():
+            if key in self.__dict__:
+                setattr(self, key, value)
+        self.save()
+        return self
+
+    @staticmethod
+    def get_by_user(user):
+        return Student.query.filter_by(user=user).all()
+
     def __repr__(self):
         return '<Student %r>' % self.name
