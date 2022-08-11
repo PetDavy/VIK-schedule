@@ -25,3 +25,16 @@ def create_student_profile(student_id, class_time, class_price):
         return student_profile
 
     raise Exception('You are not allowed to create this student profile')
+
+
+@blueprint.route('/api/student/profile/', methods=('PUT',))
+@jwt_required()
+@use_kwargs(student_profile_schema)
+@marshal_with(student_profile_schema)
+def update_student_profile(id, **kwargs):
+    student_profile = StudentProfile.query.get(id)
+
+    if student_profile and student_profile.student.user == current_user:
+        return student_profile.update_student_profile(**kwargs)
+
+    raise Exception('You are not allowed to update this student profile')

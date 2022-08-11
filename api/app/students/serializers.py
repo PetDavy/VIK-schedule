@@ -5,6 +5,8 @@ from marshmallow import validates_schema
 from marshmallow import post_dump
 from marshmallow import ValidationError
 
+from app.studentProfile.serializers import StudentProfileSchema
+
 
 class StudentSchema(Schema):
     id = fields.Int()
@@ -12,6 +14,7 @@ class StudentSchema(Schema):
     age = fields.Int(validate=validate.Range(min=2, max=90))
     info = fields.Str(validate=validate.Length(min=1, max=250))
     created_at = fields.DateTime(dump_only=True)
+    profiles = fields.List(fields.Nested(StudentProfileSchema))
 
     @post_dump
     def create_student(self, data, **kwargs):

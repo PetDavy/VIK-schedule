@@ -13,16 +13,15 @@ class StudentProfileSchema(Schema):
 
     @post_dump
     def create_student_profile(self, data, **kwargs):
-        formated_data = {
-          **data,
-          'class_time': DataFormatter.class_time(data.get('class_time')),
-        }
+        if data.get('class_time') is not None:
+            data['class_time'] = DataFormatter.class_time(data['class_time'])
 
-        return {'studentProfile: ': formated_data}
+        return {'studentProfile: ': data}
 
     @validates_schema
     def validate_inputs(self, data, **kwargs):
-        SchemaValidation.class_time(data.get('class_time'))
+        if data.get('class_time') is not None:
+            SchemaValidation.class_time(data.get('class_time'))
 
 
 student_profile_schema = StudentProfileSchema()
