@@ -32,11 +32,24 @@ class StudentProfile(db.Model):
         self.save()
         return self
 
-    def update_table(self, update_table_data):
+    def add_to_table(self, value):
         if not self.class_table:
-            self.class_table = update_table_data
+            self.class_table = value
         else:
-            self.class_table = f'{self.class_table},{update_table_data}'
+            self.class_table = f'{self.class_table},{value}'
+
+        self.save()
+        return self
+
+    def delete_from_table(self, value):
+        if not self.class_table:
+            raise ValueError('Cannot delete from empty table')
+
+        del_value = value.split(':')[0]
+        class_table_list = self.class_table.split(',')
+
+        filtered_table = [data for data in class_table_list if del_value not in data]  # noqa: E501 -  move to special util function later
+        self.class_table = ','.join(filtered_table)
 
         self.save()
         return self

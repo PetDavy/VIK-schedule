@@ -10,7 +10,10 @@ class UpdateTableSchema(Schema):
 
     @post_load
     def post_load(self, data, **kwargs):
-        return f'{data["datetime"]}:{data.get("duration", 1)}'
+        return {
+            'method': data['method'],
+            'value': f'{data["datetime"]}:{data.get("duration", 1)}'
+        }
 
 
 class StudentProfileSchema(Schema):

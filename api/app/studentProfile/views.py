@@ -48,6 +48,12 @@ def update_student_profile_table(id, update_table_data):
     student_profile = StudentProfile.query.get(id)
 
     if student_profile and student_profile.student.user == current_user:
-        return student_profile.update_table(update_table_data=update_table_data)  # noqa: E501
+        method = update_table_data['method']
+        value = update_table_data['value']
+
+        if method == 'add':
+            return student_profile.add_to_table(value)
+        if method == 'delete':
+            return student_profile.delete_from_table(value)
 
     raise Exception('You are not allowed to update this student profile')
