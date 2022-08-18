@@ -26,6 +26,29 @@ class DataFormatter():
 
         return value
 
+    @staticmethod
+    def class_table(raw_value):
+        '''
+        format: [<tamestamp>:<duration>] => [{'datetime': <tamestamp>, 'duration': <duration>}] # noqa: E501
+        '''
+
+        if not raw_value:
+            return []
+
+        table_list = raw_value.split(',')
+        values = []
+        for item in table_list:
+            if ':' not in item:
+                raise Exception('class_table item is not a valid format')
+            values.append(
+                {
+                    'datetime': int(item.split(':')[0]),
+                    'duration': float(item.split(':')[1])
+                }
+            )
+
+        return values
+
 
 class SchemaValidation():
     @staticmethod

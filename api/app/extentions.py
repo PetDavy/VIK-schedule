@@ -25,7 +25,7 @@ def load_identity(_jwt_header, jwt_data):
 
 
 db = SQLAlchemy(model_class=CRUDMixin)
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 jwt = JWTManager()
 
 jwt.user_identity_loader(send_user_identity)

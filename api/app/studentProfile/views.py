@@ -38,3 +38,16 @@ def update_student_profile(id, **kwargs):
         return student_profile.update_student_profile(**kwargs)
 
     raise Exception('You are not allowed to update this student profile')
+
+
+@blueprint.route('/api/student/profile/table', methods=('PUT',))
+@jwt_required()
+@use_kwargs(student_profile_schema)
+@marshal_with(student_profile_schema)
+def update_student_profile_table(id, update_table_data):
+    student_profile = StudentProfile.query.get(id)
+
+    if student_profile and student_profile.student.user == current_user:
+        return student_profile.update_table(update_table_data=update_table_data)  # noqa: E501
+
+    raise Exception('You are not allowed to update this student profile')
