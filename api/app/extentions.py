@@ -14,6 +14,15 @@ class CRUDMixin(Model):
         db.session.add(self)
         db.session.commit()
 
+    def update(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+        self.save()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 def send_user_identity(user):
     return user.id
@@ -25,7 +34,7 @@ def load_identity(_jwt_header, jwt_data):
 
 
 db = SQLAlchemy(model_class=CRUDMixin)
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 jwt = JWTManager()
 
 jwt.user_identity_loader(send_user_identity)

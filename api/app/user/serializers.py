@@ -3,13 +3,21 @@ from marshmallow import Schema, fields, validate, post_dump
 
 class UserSchema(Schema):
     username = fields.Str()
-    email = fields.Email(required=True, validate=validate.Email())
-    password = fields.Str(required=True, load_only=True)
+    email = fields.Email(validate=validate.Email())
+    password = fields.Str(load_only=True)
+    new_password = fields.Str(load_only=True)
     created_at = fields.DateTime(dump_only=True)
     token = fields.Str(dump_only=True)
 
+    new_password = fields.Str(load_only=True)
+    message = fields.Str(dump_only=True)
+
     @post_dump
-    def create_user(self, data, **kwargs):
+    def dump_user(self, data, **kwargs):
+        message = data.get('message', None)
+        if message is not None:
+            return data
+
         return {'user: ': data}
 
 
