@@ -1,5 +1,5 @@
 from flask import Flask
-from app import user, students, studentProfile
+from app import user, students, studentProfile, classesTable
 
 from app.extentions import db
 from app.extentions import migrate
@@ -25,3 +25,4 @@ def register_blueprints(app):
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(students.views.blueprint)
     app.register_blueprint(studentProfile.views.blueprint)
+    app.register_blueprint(classesTable.views.blueprint)

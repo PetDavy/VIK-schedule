@@ -14,6 +14,15 @@ class CRUDMixin(Model):
         db.session.add(self)
         db.session.commit()
 
+    def update(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+        self.save()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 def send_user_identity(user):
     return user.id
