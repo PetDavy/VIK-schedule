@@ -11,6 +11,9 @@ services:
       FLASK_APP: /usr/src/app/startapp.py
       FLASK_DEBUG: 1
       SQLALCHEMY_DATABASE_URI: postgresql://admin:password@db/vik-schedule-db
+      GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+      GOOGLE_CLIENT_SECRET: $GOOGLE_CLIENT_SECRET
+      OAUTHLIB_INSECURE_TRANSPORT: $OAUTHLIB_INSECURE_TRANSPORT
     volumes:
       - type: bind
         source: ./api

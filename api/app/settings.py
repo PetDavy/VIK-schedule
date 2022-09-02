@@ -15,3 +15,6 @@ class Config:
     JWT_SECRET_KEY = 'something secret'  # Change this!
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=1)
     FLASK_DEBUG = True  # Do not use debug mode in production
+    # Google variables
+    GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
+    GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)

@@ -57,3 +57,7 @@ dev.db
 
 # Vagrant machines
 .vagrant/**
+
+#Sicrets
+client_secrets.json
+.env

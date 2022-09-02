@@ -7,6 +7,8 @@ class UserSchema(Schema):
     password = fields.Str(load_only=True)
     new_password = fields.Str(load_only=True)
     created_at = fields.DateTime(dump_only=True)
+    picture = fields.Str()
+    is_google_auth = fields.Boolean()
     token = fields.Str(dump_only=True)
 
     new_password = fields.Str(load_only=True)
