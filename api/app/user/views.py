@@ -1,4 +1,3 @@
-import os
 import google.auth.transport.requests
 from flask import Blueprint, redirect, request
 from flask_apispec import use_kwargs, marshal_with
@@ -17,7 +16,7 @@ blueprint = Blueprint('user', __name__)
 @blueprint.route('/login/google', methods=['GET'])
 def login_google():
     authorization_url, state = flow.authorization_url()
-    return redirect(authorization_url)  # Change this to return url when frontend is ready
+    return redirect(authorization_url)  # noqa  Change this to return url when frontend is ready
 
 
 # Change this to POST with getting requesturl when frontend is ready

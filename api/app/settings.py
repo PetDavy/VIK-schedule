@@ -18,3 +18,6 @@ class Config:
     # Google variables
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
     GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+    CORS_ORIGIN_WHITELIST = [
+        "http://localhost:5173",
+    ]

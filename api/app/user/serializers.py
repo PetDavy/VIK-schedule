@@ -20,7 +20,7 @@ class UserSchema(Schema):
         if message is not None:
             return data
 
-        return {'user: ': data}
+        return data
 
 
 user_schema = UserSchema()

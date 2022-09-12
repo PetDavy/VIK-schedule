@@ -4,6 +4,7 @@ from app import user, students, studentProfile, classesTable
 from app.extentions import db
 from app.extentions import migrate
 from app.extentions import jwt
+from app.extentions import cors
 
 
 def create_app(config_object):
@@ -22,6 +23,12 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
+    origins = app.config.get('CORS_ORIGIN_WHITELIST', '*')
+    cors.init_app(user.views.blueprint, origins=origins)
+    cors.init_app(students.views.blueprint, origins=origins)
+    cors.init_app(studentProfile.views.blueprint, origins=origins)
+    cors.init_app(classesTable.views.blueprint, origins=origins)
+
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(students.views.blueprint)
     app.register_blueprint(studentProfile.views.blueprint)
