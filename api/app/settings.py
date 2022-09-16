@@ -20,4 +20,5 @@ class Config:
     GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
     CORS_ORIGIN_WHITELIST = [
         "http://localhost:5173",
+        "http://127.0.0.1:5173"
     ]
