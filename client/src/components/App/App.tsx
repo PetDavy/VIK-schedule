@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "../../pages/Home";
-import Login from "../../pages/Login";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Home from "../../pages/Home/Home";
+import Login from "../../pages/Login/Login";
 
 import { loadUser, endLoad } from "./App.slice";
 import { getUser } from "../../api/api";
@@ -21,7 +21,8 @@ function App() {
     try {
       dispatch(loadUser(await getUser(accessToken)));
     } catch (error) {
-      console.warn(error);
+      localStorage.removeItem('token');
+      console.error(error);
     } finally {
       dispatch(endLoad());
     }
@@ -32,11 +33,17 @@ function App() {
       <Router>
         {!loading && (
           <Routes>
-            user ? (
-              <Route path="/" element={<Home />} />
+            {user ? (
+              <>
+                <Route path="/" element={<Home />} />
+                <Route path="*" element={<Navigate to="/" replace />} /> 
+              </>
             ) : (
-              <Route path="/" element={<Login />} />
-            )
+              <>
+                <Route path="/login" element={<Login />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
+              </>
+            )}
           </Routes>   
         ) }
       </Router>

@@ -3,11 +3,17 @@ import { User } from '../types/user';
 const BASE_URL = 'http://localhost:5000';
 
 export async function getUser(accessToken: string): Promise<User> {
-  const user = await fetch(`${BASE_URL}/api/user`, {
+  const userResponse: Response = await fetch(`${BASE_URL}/api/user`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     }
   });
 
-  return user.json();
+  console.log('userResponse', userResponse);
+
+  if (!userResponse.ok) {
+    throw new Error(userResponse.statusText);
+  }
+
+  return userResponse.json();
 }

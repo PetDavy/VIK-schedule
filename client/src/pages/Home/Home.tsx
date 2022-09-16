@@ -1,4 +1,4 @@
-import { useStore } from '../state/storeHooks';
+import { useStore } from '../../state/storeHooks';
 
 function Home() {
   const [{user}] = useStore(({ app }) => app);
