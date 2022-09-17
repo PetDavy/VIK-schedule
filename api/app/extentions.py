@@ -1,6 +1,10 @@
+import os
+import pathlib
 from flask_sqlalchemy import SQLAlchemy, Model
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from google_auth_oauthlib.flow import Flow
+from flask_cors import CORS
 
 from .user import models
 
@@ -39,3 +43,11 @@ jwt = JWTManager()
 
 jwt.user_identity_loader(send_user_identity)
 jwt.user_lookup_loader(load_identity)
+
+cors = CORS()
+
+flow = Flow.from_client_secrets_file(
+   client_secrets_file=os.path.join(pathlib.Path(__file__).parent.parent, 'client_secrets.json'),
+   scopes=['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid'],
+   redirect_uri='http://127.0.0.1:5000/callback'
+)
