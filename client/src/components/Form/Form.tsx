@@ -6,18 +6,24 @@ import FormField from '../FormField/FormField';
 interface FormProps {
   fields: FormFieldType[];
   formObject: Record<string, string>;
+  errors: string[];
   buttonText: string;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onChange: (name: string, value: string) => void;
 }
 
-const Form: FC<FormProps> = ({fields, formObject, buttonText,  onSubmit, onChange}) => {
+const Form: FC<FormProps> = ({fields, formObject, errors, buttonText,  onSubmit, onChange}) => {
   function handleUpdateField(name: string, {target: {value}}: React.ChangeEvent<HTMLInputElement>) {
     onChange(name, value);
   }
 
   return (
     <form className="Form" onSubmit={onSubmit}>
+      {errors.map((error) => (
+        <div className="error" key={error}>
+          {error}
+        </div>
+      ))}
       {fields.map((filed) => (
         <FormField
           key={filed.name}

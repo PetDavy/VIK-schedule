@@ -2,6 +2,10 @@ import { User } from '../types/user';
 
 const BASE_URL = 'http://localhost:5000';
 
+export interface ResponseErrorType {
+  errors: string[];
+}
+
 export async function getUser(accessToken: string): Promise<User> {
   const userResponse: Response = await fetch(`${BASE_URL}/api/user`, {
     headers: {
@@ -16,7 +20,7 @@ export async function getUser(accessToken: string): Promise<User> {
   return userResponse.json();
 }
 
-export async function login(email: string, password: string): Promise<User> {
+export async function login(email: string, password: string): Promise<User | ResponseErrorType> {
   const loginResponse: Response = await fetch(`${BASE_URL}/api/user/login`, {
     method: 'POST',
     headers: {
@@ -27,10 +31,9 @@ export async function login(email: string, password: string): Promise<User> {
       password,
     })
   });
-
-  if (!loginResponse.ok) {
-    throw new Error(loginResponse.statusText);
+  if (loginResponse.status === 200 || loginResponse.status === 400) {
+    return loginResponse.json();
   }
-
-  return loginResponse.json();
+  
+  throw new Error(loginResponse.statusText);
 }

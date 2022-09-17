@@ -1,10 +1,10 @@
 import Form from "../../components/Form/Form";
 import { FormField, createFormField } from "../../types/formField";
-import { User } from "../../types/user";
 import {
   startLoggingIn,
   endLoggingIn,
   successLoggingIn,
+  failLoggingIn,
   updateEmail,
   updatePassword,
 } from "./Login.slice";
@@ -14,7 +14,7 @@ import { login } from "../../api/api";
 import { useStore } from "../../state/storeHooks";
 
 function Login() {
-  const [{ user }, dispatch] = useStore(({ login }) => login);
+  const [{ user, errors }, dispatch] = useStore(({ login }) => login);
 
   const fields: FormField[] = [
     createFormField({
@@ -44,15 +44,19 @@ function Login() {
     dispatch(startLoggingIn());
 
     try {
-      const userData: User = await login(user.email, user.password);
-      
-      if (userData) {
-        localStorage.setItem("token", userData.token);
+      const userData = await login(user.email, user.password);
+
+      if ('errors' in userData) {
+        dispatch(failLoggingIn(userData.errors));
+      }
+
+      if ('token' in userData) {
         dispatch(loadUser(userData));
         dispatch(successLoggingIn());
       }
+
     } catch (error) {
-      console.error(error);
+      console.warn(error);
     } finally {
       dispatch(endLoggingIn());
     }
@@ -64,6 +68,7 @@ function Login() {
       <Form
         fields={fields}
         formObject={user}
+        errors={errors}
         buttonText="Login"
         onChange={updateFileds}
         onSubmit={signIn}

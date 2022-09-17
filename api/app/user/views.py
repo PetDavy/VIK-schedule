@@ -9,6 +9,7 @@ from google.oauth2 import id_token
 from .models import User
 from .serializers import user_schema
 from app.extentions import flow
+from app.exeptions import InvalidUsage
 
 blueprint = Blueprint('user', __name__)
 
@@ -60,7 +61,7 @@ def login(email, password, **kwargs):
 
         return user
     else:
-        return {'message': 'Invalid credentials'}, 401
+        raise InvalidUsage.user_not_found()
 
 
 @blueprint.route('/api/user/register', methods=('POST',))

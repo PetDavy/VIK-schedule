@@ -5,6 +5,7 @@ interface LoginState {
     email: string;
     password: string;
   };
+  errors: string[];
   loggingIn: boolean;
   loggedIn: boolean;
 }
@@ -14,6 +15,7 @@ const initialState: LoginState = {
     email: "",
     password: "",
   },
+  errors: [],
   loggingIn: false,
   loggedIn: false,
 };
@@ -30,17 +32,22 @@ export const loginSlice = createSlice({
     },
     successLoggingIn: (state: LoginState) => {
       state.loggedIn = true;
-      state.loggingIn = false;
       state.user = {
         email: "",
         password: "",
       };
+      state.errors = [];
+    },
+    failLoggingIn: (state: LoginState, action: PayloadAction<string[]>) => {
+      state.errors = action.payload;
     },
     updateEmail: (state: LoginState, action: PayloadAction<string>) => {
       state.user.email = action.payload;
+      state.errors = [];
     },
     updatePassword: (state: LoginState, action: PayloadAction<string>) => {
       state.user.password = action.payload;
+      state.errors = [];
     },
   },
 });
@@ -49,6 +56,7 @@ export const {
   startLoggingIn,
   endLoggingIn,
   successLoggingIn,
+  failLoggingIn,
   updateEmail,
   updatePassword,
 } = loginSlice.actions;
