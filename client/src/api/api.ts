@@ -1,4 +1,5 @@
 import { User } from '../types/user';
+import { Student } from '../types/student';
 
 const BASE_URL = 'http://localhost:5000';
 
@@ -17,7 +18,26 @@ export async function getUser(accessToken: string): Promise<User> {
     throw new Error(userResponse.statusText);
   }
 
-  return userResponse.json();
+  const userData: User = await userResponse.json();
+
+  return {
+    ...userData,
+    token: accessToken
+  };
+}
+
+export async function loadStudents(accessToken: string): Promise<Student[]> {
+  const studentsResponse: Response = await fetch(`${BASE_URL}/api/students`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    }
+  });
+
+  if (!studentsResponse.ok) {
+    throw new Error(studentsResponse.statusText);
+  }
+
+  return studentsResponse.json();
 }
 
 export async function login(email: string, password: string): Promise<User | ResponseErrorType> {

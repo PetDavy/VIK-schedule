@@ -47,7 +47,8 @@ jwt.user_lookup_loader(load_identity)
 cors = CORS()
 
 flow = Flow.from_client_secrets_file(
-   client_secrets_file=os.path.join(pathlib.Path(__file__).parent.parent, 'client_secrets.json'),
-   scopes=['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid'],
-   redirect_uri='http://127.0.0.1:5000/callback'
+    client_secrets_file=os.path.join(pathlib.Path(__file__).parent.parent, 'client_secrets.json'),
+    scopes=['https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/userinfo.profile', 'openid'],
+    redirect_uri='http://127.0.0.1:5000/callback'
 )

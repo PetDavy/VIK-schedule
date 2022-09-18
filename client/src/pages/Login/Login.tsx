@@ -51,6 +51,7 @@ function Login() {
       }
 
       if ('token' in userData) {
+        localStorage.setItem('token', userData.token);
         dispatch(loadUser(userData));
         dispatch(successLoggingIn());
       }

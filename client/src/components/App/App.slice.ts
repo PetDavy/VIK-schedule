@@ -20,12 +20,16 @@ export const appSlice = createSlice({
       state.user = action.payload;
       state.loading = false;
     },
+    logout: (state: AppState) => {
+      state.user = null;
+      state.loading = false;
+    },
     endLoad: (state: AppState) => {
       state.loading = false;
     }
   }
 });
 
-export const { loadUser, endLoad } = appSlice.actions;
+export const { loadUser, endLoad, logout } = appSlice.actions;
 
 export default appSlice.reducer;

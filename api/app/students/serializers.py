@@ -18,7 +18,7 @@ class StudentSchema(Schema):
 
     @post_dump
     def create_student(self, data, **kwargs):
-        return {'student: ': data}
+        return data
 
     @validates_schema
     def update_student(self, data, **kwargs):
