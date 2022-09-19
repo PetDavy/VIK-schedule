@@ -57,3 +57,13 @@ export async function login(email: string, password: string): Promise<User | Res
   
   throw new Error(loginResponse.statusText);
 }
+
+export async function loginWithGoogle() {
+  const loginResponse: Response = await fetch(`${BASE_URL}/login/google`);
+  
+  if (!loginResponse.ok) {
+    throw new Error(loginResponse.statusText);
+  }
+
+  return loginResponse.json();
+}

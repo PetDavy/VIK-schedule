@@ -1,4 +1,5 @@
 import Form from "../../components/Form/Form";
+import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 import { FormField, createFormField } from "../../types/formField";
 import {
   startLoggingIn,
@@ -14,7 +15,7 @@ import { login } from "../../api/api";
 import { useStore } from "../../state/storeHooks";
 
 function Login() {
-  const [{ user, errors }, dispatch] = useStore(({ login }) => login);
+  const [{ user, loggingIn, errors }, dispatch] = useStore(({ login }) => login);
 
   const fields: FormField[] = [
     createFormField({
@@ -64,8 +65,9 @@ function Login() {
   }
 
   return (
-    <div>
+    <div className="Login">
       Login
+      {loggingIn && <p>Logging in...</p>}
       <Form
         fields={fields}
         formObject={user}
@@ -74,6 +76,7 @@ function Login() {
         onChange={updateFileds}
         onSubmit={signIn}
       />
+      <GoogleAuth />
     </div>
   );
 }

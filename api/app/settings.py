@@ -17,7 +17,6 @@ class Config:
     FLASK_DEBUG = True  # Do not use debug mode in production
     # Google variables
     GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-    GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
     CORS_ORIGIN_WHITELIST = [
         "http://localhost:5173",
         "http://127.0.0.1:5173"

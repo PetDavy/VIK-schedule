@@ -7,6 +7,7 @@ interface LoginState {
   };
   errors: string[];
   loggingIn: boolean;
+  googleLoggingIn: boolean;
   loggedIn: boolean;
 }
 
@@ -17,6 +18,7 @@ const initialState: LoginState = {
   },
   errors: [],
   loggingIn: false,
+  googleLoggingIn: false,
   loggedIn: false,
 };
 
@@ -27,8 +29,12 @@ export const loginSlice = createSlice({
     startLoggingIn: (state: LoginState) => {
       state.loggingIn = true;
     },
+    startGoogleLoggingIn: (state: LoginState) => {
+      state.googleLoggingIn = true;
+    },
     endLoggingIn: (state: LoginState) => {
       state.loggingIn = false;
+      state.googleLoggingIn = false;
     },
     successLoggingIn: (state: LoginState) => {
       state.loggedIn = true;
@@ -54,6 +60,7 @@ export const loginSlice = createSlice({
 
 export const {
   startLoggingIn,
+  startGoogleLoggingIn,
   endLoggingIn,
   successLoggingIn,
   failLoggingIn,

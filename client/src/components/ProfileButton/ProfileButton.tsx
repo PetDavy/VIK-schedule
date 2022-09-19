@@ -3,7 +3,6 @@ import { logout } from "../App/App.slice";
 
 function ProfileButton() {
   const [{ user }, dispatch] = useStore(({ app }) => app);
-  console.log("user", user);
 
   function handleLogout() {
     localStorage.removeItem("token");
