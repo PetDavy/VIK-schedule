@@ -46,7 +46,7 @@ def login_google_callback():
         user.save()
 
     user.token = create_access_token(user)
-    return redirect(f'{os.environ.get("CLIENT_ROOT", "localhost")}/login?token=' + user.token) # noqa
+    return redirect(f'{os.environ.get("CLIENT_ROOT", "localhost")}/login?token={user.token}') # noqa
 
 
 @blueprint.route('/api/user/login', methods=('POST',))
@@ -69,8 +69,8 @@ def login(email, password, **kwargs):
 @marshal_with(user_schema)
 def register(username, email, password, **kwargs):
     user = User(username=username, email=email, password=password, **kwargs)
-    user.token = create_access_token(user)
     user.save()
+    user.token = create_access_token(user)
     return user
 
 

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import Form from "../../components/Form/Form";
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 import { FormField, createFormField } from "../../types/formField";
@@ -10,7 +12,7 @@ import {
   updatePassword,
 } from "./Login.slice";
 import { loadUser } from "../../components/App/App.slice";
-import { login } from "../../api/api";
+import { login } from "../../api/api.user";
 
 import { useStore } from "../../state/storeHooks";
 
@@ -45,7 +47,7 @@ function Login() {
     dispatch(startLoggingIn());
 
     try {
-      const userData = await login(user.email, user.password);
+      const userData = await login(user);
 
       if ('errors' in userData) {
         dispatch(failLoggingIn(userData.errors));
@@ -77,6 +79,7 @@ function Login() {
         onSubmit={signIn}
       />
       <GoogleAuth />
+      <Link to="/register">Sign up</Link>
     </div>
   );
 }

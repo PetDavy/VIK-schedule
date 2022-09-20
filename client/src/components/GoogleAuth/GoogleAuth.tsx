@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useStore } from "../../state/storeHooks";
 
-import { loginWithGoogle, getUser } from "../../api/api";
+import { loginWithGoogle, getUser } from "../../api/api.user";
 import { loadUser } from "../App/App.slice";
 import { startGoogleLoggingIn, endLoggingIn } from "../../pages/Login/Login.slice";
 

@@ -1,6 +1,6 @@
 import { useStore, useStoreWithInit } from "../../state/storeHooks";
 import StudentListItem from "./StudentListItem";
-import { loadStudents } from "../../api/api";
+import { loadStudents } from "../../api/api.student";
 import { setStudents } from "./StudentsList.slice";
 
 function StudentsList() {
@@ -9,9 +9,9 @@ function StudentsList() {
 
   async function getStudents() {
     const accessToken = user?.token; 
-
+    
     if (!accessToken) return;
-
+    
     try {
       dispatch(setStudents(await loadStudents(accessToken)));
     } catch (error) {
