@@ -71,7 +71,7 @@ def register(username, email, password, **kwargs):
     user = User(username=username, email=email, password=password, **kwargs)
     user.save()
     user.token = create_access_token(user)
-    return user
+    return user, 201
 
 
 @blueprint.route('/api/user', methods=('GET',))
