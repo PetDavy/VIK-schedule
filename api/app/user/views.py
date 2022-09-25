@@ -1,5 +1,7 @@
+import os
+
 import google.auth.transport.requests
-from flask import Blueprint, redirect, request
+from flask import Blueprint, request, jsonify, redirect
 from flask_apispec import use_kwargs, marshal_with
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import create_access_token
@@ -17,12 +19,10 @@ blueprint = Blueprint('user', __name__)
 @blueprint.route('/login/google', methods=['GET'])
 def login_google():
     authorization_url, state = flow.authorization_url()
-    return redirect(authorization_url)  # noqa  Change this to return url when frontend is ready
+    return jsonify({'authUrl': authorization_url})
 
 
-# Change this to POST with getting requesturl when frontend is ready
 @blueprint.route('/callback', methods=['GET'])
-@marshal_with(user_schema)
 def login_google_callback():
     flow.fetch_token(authorization_response=request.url)
 
@@ -46,7 +46,7 @@ def login_google_callback():
         user.save()
 
     user.token = create_access_token(user)
-    return user
+    return redirect(f'{os.environ.get("CLIENT_ROOT", "localhost")}/login?token={user.token}') # noqa
 
 
 @blueprint.route('/api/user/login', methods=('POST',))
@@ -69,9 +69,9 @@ def login(email, password, **kwargs):
 @marshal_with(user_schema)
 def register(username, email, password, **kwargs):
     user = User(username=username, email=email, password=password, **kwargs)
-    user.token = create_access_token(user)
     user.save()
-    return user
+    user.token = create_access_token(user)
+    return user, 201
 
 
 @blueprint.route('/api/user', methods=('GET',))

@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
+
 import Form from "../../components/Form/Form";
+import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 import { FormField, createFormField } from "../../types/formField";
 import {
   startLoggingIn,
@@ -9,12 +12,12 @@ import {
   updatePassword,
 } from "./Login.slice";
 import { loadUser } from "../../components/App/App.slice";
-import { login } from "../../api/api";
+import { login } from "../../api/api.user";
 
 import { useStore } from "../../state/storeHooks";
 
 function Login() {
-  const [{ user, errors }, dispatch] = useStore(({ login }) => login);
+  const [{ user, loggingIn, errors }, dispatch] = useStore(({ login }) => login);
 
   const fields: FormField[] = [
     createFormField({
@@ -44,13 +47,14 @@ function Login() {
     dispatch(startLoggingIn());
 
     try {
-      const userData = await login(user.email, user.password);
+      const userData = await login(user);
 
       if ('errors' in userData) {
         dispatch(failLoggingIn(userData.errors));
       }
 
       if ('token' in userData) {
+        localStorage.setItem('token', userData.token);
         dispatch(loadUser(userData));
         dispatch(successLoggingIn());
       }
@@ -63,8 +67,9 @@ function Login() {
   }
 
   return (
-    <div>
+    <div className="Login">
       Login
+      {loggingIn && <p>Logging in...</p>}
       <Form
         fields={fields}
         formObject={user}
@@ -73,6 +78,8 @@ function Login() {
         onChange={updateFileds}
         onSubmit={signIn}
       />
+      <GoogleAuth />
+      <Link to="/register">Sign up</Link>
     </div>
   );
 }

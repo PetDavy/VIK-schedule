@@ -4,14 +4,19 @@ import { useEffect } from "react";
 
 import { Store } from "./store";
 
-export function useStore<T>(getter: (store: Store) => T, loadInitData?: () => void): [T, Dispatch<AnyAction>] {
+export function useStore<T>(getter: (store: Store) => T): [T, Dispatch<AnyAction>] {
   const dispatch = useDispatch();
 
+  
+  return [useSelector(getter), dispatch];
+}
+
+export function useStoreWithInit<T>(getter: (store: Store) => T, loadInitData: () => void): [T, Dispatch<AnyAction>] {
   useEffect(() => {
     if (loadInitData) {
       loadInitData();
     }
   }, [null])
 
-  return [useSelector(getter), dispatch];
+  return useStore(getter);
 }

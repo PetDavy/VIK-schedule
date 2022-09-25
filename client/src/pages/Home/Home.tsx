@@ -1,11 +1,9 @@
-import { useStore } from '../../state/storeHooks';
+import StudentsList from '../../components/StudentsList/StudentsList';
 
 function Home() {
-  const [{user}] = useStore(({ app }) => app);
-
   return (
     <div>
-      <h1>User: {user && user.username}</h1>
+      <StudentsList />
     </div>
   )
 };

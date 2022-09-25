@@ -2,7 +2,7 @@ FROM python:3.7
 
 WORKDIR /usr/src/app
 COPY . .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements/prod.txt
 EXPOSE 5000
 
 ENTRYPOINT ["flask"]
