@@ -1,5 +1,12 @@
 version: "3"
 services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: tester
+      POSTGRES_DB: vik-schedule-db-dev
   api:
     image: vik-schedule-dev
     build:
@@ -14,21 +21,10 @@ services:
       GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
       CLIENT_ROOT: $CLIENT_ROOT
       OAUTHLIB_INSECURE_TRANSPORT: $OAUTHLIB_INSECURE_TRANSPORT
+      TEST: 1
     depends_on:
       - db
     volumes:
       - type: bind
         source: ./api
         target: /usr/src/app
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: tester
-      POSTGRES_DB: vik-schedule-db-dev
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080

@@ -21,5 +21,12 @@ if [ -z "$(flask db current)" ]; then
     flask db upgrade
 fi
 
-#run the app
+# check if env variable TEST is set to true
+if [ "$TEST" = 1 ]; then
+    echo "Running tests..."
+    python3 -m pytest
+    exit 0
+fi
+
+
 flask run --host 0.0.0.0 --port 5000
