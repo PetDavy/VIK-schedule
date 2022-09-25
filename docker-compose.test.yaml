@@ -7,6 +7,8 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: tester
       POSTGRES_DB: vik-schedule-db-dev
+    ports:
+      - 6543:5432
   # api:
   #   image: vik-schedule-dev
   #   build:
