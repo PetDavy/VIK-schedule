@@ -6,8 +6,29 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.7
 
-      - name: Run Tests
-        run: sh start.sh test
+      - name: Start db container
+        run: docker-compose up -f docker-compose.test.yaml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd api
+          pip install -r requirements/dev.txt
+          EXPORT FLASK_APP=startapp.py
+          EXPORT FLASK_DEBUG=1
+          EXPORT SQLALCHEMY_DATABASE_URI=postgresql://tester:password@db/0.0.0.0:5432
+          EXPORT TEST=1
+
+      - name: Setup database
+        run: |
+          flask db migrate
+          flask db upgrade
+
+      - name: Run tests
+        run: |
+          pytest
