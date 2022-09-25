@@ -19,10 +19,10 @@ jobs:
           python -m pip install --upgrade pip
           cd api
           pip install -r requirements/dev.txt
-          EXPORT FLASK_APP=startapp.py
-          EXPORT FLASK_DEBUG=1
-          EXPORT SQLALCHEMY_DATABASE_URI=postgresql://tester:password@db/0.0.0.0:5432
-          EXPORT TEST=1
+          export FLASK_APP=startapp.py
+          export FLASK_DEBUG=1
+          export SQLALCHEMY_DATABASE_URI=postgresql://tester:password@db/0.0.0.0:5432
+          export TEST=1
 
       - name: Setup database
         run: |
