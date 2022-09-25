@@ -23,10 +23,6 @@ jobs:
           export FLASK_DEBUG=1
           export SQLALCHEMY_DATABASE_URI=postgresql://tester:password@db/0.0.0.0:5432
           export TEST=1
-
-      - name: Setup database
-        working-directory: ./api
-        run: |
           flask db migrate
           flask db upgrade
 
