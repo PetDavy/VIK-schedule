@@ -1,0 +1,16 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Start Containers
+        run: docker-compose -f docker-compose.dev.yaml up --build --exit-code-from api
+
+      - name: Run Tests
+        run: sh start.sh test
