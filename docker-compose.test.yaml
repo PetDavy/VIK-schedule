@@ -7,24 +7,5 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: tester
       POSTGRES_DB: vik-schedule-db-dev
-  api:
-    image: vik-schedule-dev
-    build:
-      context: ./api
-      dockerfile: Dockerfile.dev
     ports:
-      - 5000:5000
-    environment:
-      FLASK_APP: /usr/src/app/startapp.py
-      FLASK_DEBUG: 1
-      SQLALCHEMY_DATABASE_URI: postgresql://tester:password@db/vik-schedule-db-dev
-      GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
-      CLIENT_ROOT: $CLIENT_ROOT
-      OAUTHLIB_INSECURE_TRANSPORT: $OAUTHLIB_INSECURE_TRANSPORT
-      TEST: 1
-    depends_on:
-      - db
-    volumes:
-      - type: bind
-        source: ./api
-        target: /usr/src/app
+    - "5432:5432"

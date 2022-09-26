@@ -1,0 +1,39 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.7
+
+      - name: Start db container
+        run: docker-compose -f docker-compose.test.yaml up -d
+
+      - name: Install dependencies
+        working-directory: ./api
+        env:
+          FLASK_APP: startapp.py
+          FLASK_DEBUG: 1
+          SQLALCHEMY_DATABASE_URI: postgresql://tester:password@localhost/vik-schedule-db-dev
+          TEST: 1
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/dev.txt
+          flask db stamp head
+          flask db migrate
+          flask db upgrade
+
+      - name: Run tests
+        working-directory: ./api
+        env:
+          FLASK_APP: startapp.py
+          FLASK_DEBUG: 1
+          SQLALCHEMY_DATABASE_URI: postgresql://tester:password@localhost/vik-schedule-db-dev
+          TEST: 1
+        run: |
+          pytest
