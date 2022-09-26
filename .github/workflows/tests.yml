@@ -21,7 +21,7 @@ jobs:
           pip install -r requirements/dev.txt
           export FLASK_APP=startapp.py
           export FLASK_DEBUG=1
-          export SQLALCHEMY_DATABASE_URI=postgresql://tester:password@0.0.0.0:6543/vik-schedule-db-dev
+          export SQLALCHEMY_DATABASE_URI=postgresql://tester:password@localhost/vik-schedule-db-dev
           export TEST=1
           flask db migrate
           flask db upgrade
