@@ -19,7 +19,7 @@ def _login_user(client):
 class TestUser:
     def test_register(self, client):
         response = _register_user(client)
-        assert response.status_code == 200
+        assert response.status_code == 201
         assert response.json['username'] == 'tester'
         assert response.json['email'] == 'test@email.com'
         assert response.json['token'] is not None
