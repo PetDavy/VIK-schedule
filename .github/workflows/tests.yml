@@ -23,9 +23,11 @@ jobs:
           export FLASK_DEBUG=1
           export SQLALCHEMY_DATABASE_URI=postgresql://tester:password@localhost/vik-schedule-db-dev
           export TEST=1
+          flask db stamp head
           flask db migrate
           flask db upgrade
 
       - name: Run tests
+        working-directory: ./api
         run: |
           pytest
