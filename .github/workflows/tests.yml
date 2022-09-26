@@ -30,5 +30,10 @@ jobs:
 
       - name: Run tests
         working-directory: ./api
+        env:
+          FLASK_APP: startapp.py
+          FLASK_DEBUG: 1
+          SQLALCHEMY_DATABASE_URI: postgresql://tester:password@localhost/vik-schedule-db-dev
+          TEST: 1
         run: |
           pytest
