@@ -9,7 +9,7 @@ from flask_jwt_extended import current_user
 from google.oauth2 import id_token
 
 from .models import User
-from .serializers import user_schema
+from .serializers import user_schema, user_update_schema
 from app.extentions import flow
 from app.exeptions import InvalidUsage
 
@@ -68,10 +68,15 @@ def login(email, password, **kwargs):
 @use_kwargs(user_schema)
 @marshal_with(user_schema)
 def register(username, email, password, **kwargs):
-    user = User(username=username, email=email, password=password, **kwargs)
-    user.save()
-    user.token = create_access_token(user)
-    return user, 201
+    user = User.query.filter_by(email=email).first()
+
+    if user is not None:
+        raise InvalidUsage.user_already_exists()
+    else:
+        user = User(username=username, email=email, password=password, **kwargs) # noqa
+        user.save()
+        user.token = create_access_token(user)
+        return user, 201
 
 
 @blueprint.route('/api/user', methods=('GET',))
@@ -83,8 +88,8 @@ def get_user():
 
 @blueprint.route('/api/user/update', methods=('PUT',))
 @jwt_required()
-@use_kwargs(user_schema)
-@marshal_with(user_schema)
+@use_kwargs(user_update_schema)
+@marshal_with(user_update_schema)
 def update_user(**kwargs):
     password = kwargs.pop('password', None)
     new_password = kwargs.pop('new_password', None)

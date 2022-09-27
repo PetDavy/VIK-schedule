@@ -5,14 +5,14 @@ def _register_user(client):
     user = {
         'username': 'tester',
         'email': 'test@email.com',
-        'password': 'password'
+        'password': 'password_12345_PASSWORD'
     }
 
     return client.post(url_for('user.register'), json=user)
 
 
 def _login_user(client):
-    user = {'email': 'test@email.com', 'password': 'password'}
+    user = {'email': 'test@email.com', 'password': 'password_12345_PASSWORD'}
     return client.post(url_for('user.login'), json=user)
 
 
@@ -47,8 +47,56 @@ class TestUser:
     def test_change_password(self, client):
         user = _login_user(client)
         response = client.put(url_for('user.update_user'), json={
-            'password': 'password',
-            'new_password': 'new_password'
+            'password': 'password_12345_PASSWORD',
+            'new_password': 'new_password_12345_PASSWORD'
         }, headers={'Authorization': f'Bearer {user.json["token"]}'})
         assert response.status_code == 200
         assert response.json['username'] == 'tester'
+
+    # VALIDATION TESTS
+    def test_register_with_invalid_email(self, client):
+        user = {
+            'username': 'tester',
+            'email': 'another',
+            'password': 'password_12345_PASSWORD'
+        }
+        response = client.post(url_for('user.register'), json=user)
+        assert response.status_code == 422
+        assert 'Invalid field' in response.json['errors']
+        assert 'email' in response.json['fields']
+
+    def test_register_with_invalid_password(self, client):
+        user = {
+            'username': 'tester',
+            'email': 'another@gmail.com',
+            'password': 'password'
+        }
+        response = client.post(url_for('user.register'), json=user)
+        assert response.status_code == 422
+        assert 'Invalid field' in response.json['errors']
+        assert 'password' in response.json['fields']
+
+    def test_register_with_empty_fields(self, client):
+        user = {
+            'username': '',
+            'email': '',
+            'password': ''
+        }
+        response = client.post(url_for('user.register'), json=user)
+        assert response.status_code == 422
+        assert 'Empty field' in response.json['errors']
+        assert len(response.json['fields']) == 3
+
+    def test_login_with_no_email(self, client):
+        user = {'password': 'password_12345_PASSWORD', 'email': ''}
+        response = client.post(url_for('user.login'), json=user)
+        assert response.status_code == 422
+        assert 'Empty field' in response.json['errors']
+        assert 'email' in response.json['fields']
+
+    def test_login_with_no_password(self, client):
+        user = {'email': 'test@email.com', 'password': ''}
+        response = client.post(url_for('user.login'), json=user)
+        assert response.status_code == 422
+        assert 'Empty field' in response.json['errors']
+        assert 'password' in response.json['fields']

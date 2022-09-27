@@ -1,5 +1,86 @@
 import json
 
+from abc import ABC, abstractmethod
+from marshmallow import validate, ValidationError
+
+from app.exeptions import InvalidValue
+
+
+class ValidationSchema:
+    def validate(self, data):
+        self.validate_empty_field(data)
+
+    def validate_empty_field(cls, data):
+        empty_fields = []
+        for key, value in data.items():
+            if not value:
+                empty_fields.append(key)
+
+        if empty_fields:
+            raise InvalidValue.empty_fields(empty_fields)
+
+
+class ValidationUserSchema(ValidationSchema):
+    def validate(self, data, is_update=False):
+        if not is_update:
+            super().validate(data)
+        elif 'new_password' in data:
+            self.validate_empty_field({'new_password': data['new_password']})
+            self.validate_password(data['new_password'])
+
+        if data.get('email'):
+            self.validate_email(data['email'])
+
+        if data.get('password'):
+            self.validate_password(data['password'])
+
+    def validate_email(self, email):
+        try:
+            validator = validate.Email()
+            validator(email)
+        except ValidationError:
+            raise InvalidValue.invalid_fileds(['email'])
+
+    def validate_password(self, password):
+        """
+            Password must be at least 8 characters long
+            and contain at least one
+            digit, one uppercase letter,
+            one lowercase letter, and one special
+            character.
+        """
+        try:
+            validator = validate.And(
+                validate.Length(min=8),
+                validate.Length(max=80),
+                validate.Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$') # noqa
+            )
+
+            validator(password)
+        except ValidationError:
+            raise InvalidValue.invalid_fileds(['password'])
+
+
+class Validator(ABC):
+    schema: ValidationSchema = ValidationSchema()
+
+    @abstractmethod
+    def validate(self, data):
+        """ Validate data """
+        pass
+
+
+class UserValidator(Validator):
+    schema = ValidationUserSchema()
+
+    @classmethod
+    def validate(cls, data):
+        cls.schema.validate(data)
+
+    @classmethod
+    def validate_update(cls, data):
+        cls.schema.validate(data, is_update=True)
+
 
 class DataFormatter():
     @staticmethod

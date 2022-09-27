@@ -1,4 +1,5 @@
 from flask import Flask
+
 from app import user, students, studentProfile, classesTable
 
 from app.extentions import db
