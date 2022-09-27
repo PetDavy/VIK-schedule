@@ -10,7 +10,7 @@ export async function registerUser(user: UserRegister): Promise<User | ResponseE
     body: JSON.stringify(user),
   });
 
-  if (registerResponse.status === 200 || registerResponse.status === 400) {
+  if (registerResponse.status === 201 || registerResponse.status === 400) {
     return registerResponse.json();
   }
 

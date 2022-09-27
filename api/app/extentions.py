@@ -47,7 +47,7 @@ jwt.user_lookup_loader(load_identity)
 cors = CORS()
 
 flow = {} if os.environ.get("TEST") else Flow.from_client_secrets_file(
-    client_secrets_file=os.path.join(pathlib.Path(__file__).parent.parent, 'client_secrets.json'),
+    client_secrets_file=os.path.join(pathlib.Path(__file__).parent.parent, 'client_secrets.json'), # noqa
     scopes=['https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/userinfo.profile', 'openid'],
     redirect_uri='http://127.0.0.1:5000/callback'
