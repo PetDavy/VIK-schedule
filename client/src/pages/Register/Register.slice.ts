@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ResponseErrorType } from "../../api/api";
 
 interface RegisterState {
   user: {
@@ -6,7 +7,7 @@ interface RegisterState {
     email: string;
     password: string;
   };
-  errors: string[];
+  errors: ResponseErrorType;
   registering: boolean;
 }
 
@@ -16,7 +17,10 @@ const initialState: RegisterState = {
     email: '',
     password: '',
   },
-  errors: [],
+  errors: {
+    messages: [],
+    fields: []
+  },
   registering: false,
 }
 
@@ -37,20 +41,35 @@ export const registerSlice = createSlice({
         email: '',
         password: '',
       };
-      state.errors = [];
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     }),
-    failRegister: ((state: RegisterState, action: PayloadAction<string[]>) => {
+    failRegister: ((state: RegisterState, action: PayloadAction<ResponseErrorType>) => {
       state.registering = false;
       state.errors = action.payload;
     }),
     updateUsername: ((state: RegisterState, action: PayloadAction<string>) => {
-      state.user.username = action.payload
+      state.user.username = action.payload;
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     }),
     updateEmail: ((state: RegisterState, action: PayloadAction<string>) => {
       state.user.email = action.payload;
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     }),
     updatePassword: ((state: RegisterState, action: PayloadAction<string>) => {
       state.user.password = action.payload;
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     })
   }
 });

@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ResponseErrorType } from "../../api/api";
 
 interface LoginState {
   user: {
     email: string;
     password: string;
   };
-  errors: string[];
+  errors: ResponseErrorType;
   loggingIn: boolean;
   googleLoggingIn: boolean;
   loggedIn: boolean;
@@ -16,7 +17,10 @@ const initialState: LoginState = {
     email: "",
     password: "",
   },
-  errors: [],
+  errors: {
+    messages: [],
+    fields: [],
+  },
   loggingIn: false,
   googleLoggingIn: false,
   loggedIn: false,
@@ -42,18 +46,27 @@ export const loginSlice = createSlice({
         email: "",
         password: "",
       };
-      state.errors = [];
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     },
-    failLoggingIn: (state: LoginState, action: PayloadAction<string[]>) => {
+    failLoggingIn: (state: LoginState, action: PayloadAction<ResponseErrorType>) => {
       state.errors = action.payload;
     },
     updateEmail: (state: LoginState, action: PayloadAction<string>) => {
       state.user.email = action.payload;
-      state.errors = [];
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     },
     updatePassword: (state: LoginState, action: PayloadAction<string>) => {
       state.user.password = action.payload;
-      state.errors = [];
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
     },
   },
 });
