@@ -49,8 +49,8 @@ function Login() {
     try {
       const userData = await login(user);
 
-      if ('errors' in userData) {
-        dispatch(failLoggingIn(userData.errors));
+      if ('messages' in userData) {
+        dispatch(failLoggingIn(userData));
       }
 
       if ('token' in userData) {

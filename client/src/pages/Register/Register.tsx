@@ -15,7 +15,7 @@ import {
 import Form from "../../components/Form/Form";
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 
-import { registerUser} from "../../api/api.user";
+import { registerUser } from "../../api/api.user";
 import { loadUser } from "../../components/App/App.slice";
 
 function Register() {
@@ -58,8 +58,8 @@ function Register() {
     try {
       const userData = await registerUser(user);
 
-      if ('errors' in userData) {
-        dispatch(failRegister(userData.errors));
+      if ('messages' in userData) {
+        dispatch(failRegister(userData));
       }
 
       if ('token' in userData) {

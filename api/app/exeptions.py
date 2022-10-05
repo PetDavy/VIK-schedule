@@ -3,8 +3,8 @@ from flask import jsonify
 
 def template(data, code):
     return {
-        'message': {
-            'errors': data,
+        'errors': {
+            'messages': data,
         },
         'status_code': code,
     }
@@ -19,15 +19,15 @@ INVALID_FIELDS = template(data=['Invalid field'], code=422)
 class InvalidUsage(Exception):
     status_code = 500
 
-    def __init__(self, message, status_code=None, payload=None):
+    def __init__(self, errors, status_code=None, payload=None):
         Exception.__init__(self)
-        self.message = message
+        self.errors = errors
         if status_code is not None:
             self.status_code = status_code
         self.payload = payload
 
     def to_json(self):
-        errors = self.message
+        errors = self.errors
         payload = dict(self.payload or ())
         return jsonify({**errors, **payload})
 
@@ -46,5 +46,5 @@ class InvalidValue(InvalidUsage):
         return cls(**EMPTY_FIELD, payload={'fields': fields})
 
     @classmethod
-    def invalid_fileds(cls, fields):
+    def invalid_fields(cls, fields):
         return cls(**INVALID_FIELDS, payload={'fields': fields})

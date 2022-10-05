@@ -4,6 +4,7 @@ export interface FormField {
   placeholder: string;
   required: boolean;
   disabled: boolean;
+  invalid: boolean;
 }
 
 export function createFormField(data: Partial<FormField> & {name: string}): FormField {
@@ -12,6 +13,7 @@ export function createFormField(data: Partial<FormField> & {name: string}): Form
     placeholder: '',
     required: false,
     disabled: false,
+    invalid: false,
     ...data
   }
 }
