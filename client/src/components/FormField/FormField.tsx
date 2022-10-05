@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { FormField as FormFieldType } from '../../types/formField';
+import { FormField as FormFieldType } from "../../types/formField";
 
 interface FormFieldProps extends FormFieldType {
   value: string;
@@ -7,7 +7,17 @@ interface FormFieldProps extends FormFieldType {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FormField: FC<FormFieldProps> = ({ name, value, placeholder, label, type, required, disabled, onChange}) => {
+const FormField: FC<FormFieldProps> = ({
+  name,
+  value,
+  placeholder,
+  label,
+  type,
+  required,
+  disabled,
+  invalid,
+  onChange,
+}) => {
   return (
     <div className="form-field">
       <label htmlFor={name}>{label}</label>
@@ -19,9 +29,10 @@ const FormField: FC<FormFieldProps> = ({ name, value, placeholder, label, type, 
         required={required}
         disabled={disabled}
         onChange={onChange}
+        style={{ borderColor: invalid ? "red" : "initial" }}
       />
     </div>
   );
-}
+};
 
 export default FormField;

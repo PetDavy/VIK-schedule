@@ -22,26 +22,30 @@ class ValidationSchema:
 
 class ValidationUserSchema(ValidationSchema):
     def validate(self, data, is_update=False):
+        errors = []
         if not is_update:
             super().validate(data)
         elif 'new_password' in data:
             self.validate_empty_field({'new_password': data['new_password']})
-            self.validate_password(data['new_password'])
+            self.validate_password(data['new_password'], errors=errors)
 
         if data.get('email'):
-            self.validate_email(data['email'])
+            self.validate_email(data['email'], errors=errors)
 
         if data.get('password'):
-            self.validate_password(data['password'])
+            self.validate_password(data['password'], errors=errors)
 
-    def validate_email(self, email):
+        if errors:
+            raise InvalidValue.invalid_fields(errors)
+
+    def validate_email(self, email, errors):
         try:
             validator = validate.Email()
             validator(email)
         except ValidationError:
-            raise InvalidValue.invalid_fileds(['email'])
+            errors.append('email')
 
-    def validate_password(self, password):
+    def validate_password(self, password, errors):
         """
             Password must be at least 8 characters long
             and contain at least one
@@ -58,7 +62,7 @@ class ValidationUserSchema(ValidationSchema):
 
             validator(password)
         except ValidationError:
-            raise InvalidValue.invalid_fileds(['password'])
+            errors.append('password')
 
 
 class Validator(ABC):
