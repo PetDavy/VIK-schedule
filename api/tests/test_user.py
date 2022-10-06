@@ -44,15 +44,6 @@ class TestUser:
         assert response.json['token'] == ''
         assert response.json['is_google_auth'] is False
 
-    def test_change_password(self, client):
-        user = _login_user(client)
-        response = client.put(url_for('user.update_user'), json={
-            'password': 'password_12345_PASSWORD',
-            'new_password': 'new_password_12345_PASSWORD'
-        }, headers={'Authorization': f'Bearer {user.json["token"]}'})
-        assert response.status_code == 200
-        assert response.json['username'] == 'tester'
-
     # VALIDATION TESTS
     def test_register_with_invalid_email(self, client):
         user = {
@@ -87,6 +78,17 @@ class TestUser:
         assert 'Empty field' in response.json['messages']
         assert len(response.json['fields']) == 3
 
+    def test_register_with_existing_email(self, client):
+        _register_user(client)
+        user = {
+            'username': 'tester',
+            'email': 'test@email.com',
+            'password': 'password_12345_PASSWORD'
+        }
+        response = client.post(url_for('user.register'), json=user)
+        assert response.status_code == 400
+        assert 'User already exists' in response.json['messages']
+
     def test_login_with_no_email(self, client):
         user = {'password': 'password_12345_PASSWORD', 'email': ''}
         response = client.post(url_for('user.login'), json=user)
@@ -100,3 +102,54 @@ class TestUser:
         assert response.status_code == 422
         assert 'Empty field' in response.json['messages']
         assert 'password' in response.json['fields']
+
+    def test_login_with_wrong_password(self, client):
+        user = {'email': 'test@email.com', 'password': 'wrong_12345_PASSWORD'}
+        response = client.post(url_for('user.login'), json=user)
+        assert response.status_code == 400
+        assert 'User not found' in response.json['messages']
+
+    def test_change_password_with_wrong_old_password(self, client):
+        user = _login_user(client)
+        response = client.put(url_for('user.update_user'), json={
+            'password': 'wrong_12345_PASSWORD',
+            'new_password': 'new_password_12345_PASSWORD'
+        }, headers={'Authorization': f'Bearer {user.json["token"]}'})
+        assert response.status_code == 400
+        assert 'User not found' in response.json['messages']
+
+    def test_change_email_with_empty_email(self, client):
+        user = _login_user(client)
+        response = client.put(url_for('user.update_user'), json={
+            'email': ''
+        }, headers={'Authorization': f'Bearer {user.json["token"]}'})
+        assert response.status_code == 422
+        assert 'Empty field' in response.json['messages']
+        assert 'email' in response.json['fields']
+
+    def test_change_email_with_invalid_email(self, client):
+        user = _login_user(client)
+        response = client.put(url_for('user.update_user'), json={
+            'email': 'another'
+        }, headers={'Authorization': f'Bearer {user.json["token"]}'})
+        assert response.status_code == 422
+        assert 'Invalid field' in response.json['messages']
+        assert 'email' in response.json['fields']
+
+    # UPDATE TESTS
+    def test_change_username(self, client):
+        user = _login_user(client)
+        response = client.put(url_for('user.update_user'), json={
+            'username': 'new_tester'
+        }, headers={'Authorization': f'Bearer {user.json["token"]}'})
+        assert response.status_code == 200
+        assert response.json['username'] == 'new_tester'
+
+    def test_change_password(self, client):
+        user = _login_user(client)
+        response = client.put(url_for('user.update_user'), json={
+            'password': 'password_12345_PASSWORD',
+            'new_password': 'new_password_12345_PASSWORD'
+        }, headers={'Authorization': f'Bearer {user.json["token"]}'})
+        assert response.status_code == 200
+        assert response.json['username'] == 'new_tester'

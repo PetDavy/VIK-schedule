@@ -15,3 +15,11 @@ export interface UserLogin {
 export interface UserRegister extends UserLogin {
   username: string;
 }
+
+export interface UserUpdate {
+  username?: string;
+  email?: string;
+  picture?: string;
+  password?: string;
+  new_password?: string;
+}

@@ -19,20 +19,7 @@ import { useStore } from "../../state/storeHooks";
 function Login() {
   const [{ user, loggingIn, errors }, dispatch] = useStore(({ login }) => login);
 
-  const fields: FormField[] = [
-    createFormField({
-      name: "email",
-      placeholder: "Email",
-      type: "email",
-      required: true,
-    }),
-    createFormField({
-      name: "password",
-      placeholder: "Password",
-      type: "password",
-      required: true,
-    }),
-  ];
+  const fields = getDefaultFormFields();
 
   function updateFileds(name: string, value: string) {
     if (name === "email") {
@@ -82,6 +69,23 @@ function Login() {
       <Link to="/register">Sign up</Link>
     </div>
   );
+}
+
+function getDefaultFormFields(): FormField[] {
+  return [
+    createFormField({
+      name: "email",
+      placeholder: "Email",
+      type: "email",
+      required: true,
+    }),
+    createFormField({
+      name: "password",
+      placeholder: "Password",
+      type: "password",
+      required: true,
+    }),
+  ];
 }
 
 export default Login;

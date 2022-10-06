@@ -21,25 +21,7 @@ import { loadUser } from "../../components/App/App.slice";
 function Register() {
   const [{user, registering, errors}, dispatch] = useStore(({register}) => register);
 
-  const fields: FormField[] = [
-    createFormField({
-      name: "username",
-      placeholder: "Username",
-      required: true,
-    }),
-    createFormField({
-      name: "email",
-      placeholder: "Email",
-      type: "email",
-      required: true,
-    }),
-    createFormField({
-      name: "password",
-      placeholder: "Password",
-      type: "password", 
-      required: true,
-    })
-  ];
+  const fields = getDefaultFormFields();
 
   function updateFileds(name: string, value: string) {
     if (name === "username") {
@@ -91,6 +73,28 @@ function Register() {
       <Link to="/login">Log in</Link>
     </div>
   );
+}
+
+function getDefaultFormFields(): FormField[] {
+  return [
+    createFormField({
+      name: "username",
+      placeholder: "Username",
+      required: true,
+    }),
+    createFormField({
+      name: "email",
+      placeholder: "Email",
+      type: "email",
+      required: true,
+    }),
+    createFormField({
+      name: "password",
+      placeholder: "Password",
+      type: "password", 
+      required: true,
+    })
+  ];
 }
 
 export default Register;

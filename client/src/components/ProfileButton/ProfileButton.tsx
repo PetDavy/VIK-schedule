@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
+
 import { useStore } from "../../state/storeHooks";
+import { getImgTextFromName } from "../../utils/user";
 import { logout } from "../App/App.slice";
 
 function ProfileButton() {
@@ -11,7 +14,7 @@ function ProfileButton() {
 
   function getAvatar(): JSX.Element | undefined {
     if (user && user.picture) {
-      return <img src={user.picture} alt={user.username} />;
+      return <img src={user.picture} alt={user.username} width="100" height="125" />;
     }
 
     if (user && !user.picture) {
@@ -38,17 +41,10 @@ function ProfileButton() {
     <div className="ProfileButton">
       {getAvatar()}
       <h2>{user?.username}</h2>
+      <Link to="/profile">Edit</Link>
       <button onClick={handleLogout}>Log out</button>
     </div>
   );
-}
-
-function getImgTextFromName(name: string) {
-  const [firstName, lastName] = name.split(" ");
-  const firstLetter = firstName[0];
-  const secondLetter = lastName ? lastName[0] : "";
-
-  return `${firstLetter}${secondLetter}`.toUpperCase();
 }
 
 export default ProfileButton;

@@ -25,7 +25,7 @@ def register(username, email, password, **kwargs):
     if user is not None:
         raise InvalidUsage.user_already_exists()
     else:
-        user = User(username=username, email=email, password=password, **kwargs) # noqa
+        user = User(username=username, email=email, password=password, **kwargs)  # noqa
         user.save()
         user.token = create_access_token(user)
         return user, 201
@@ -58,10 +58,18 @@ def get_user():
 @use_kwargs(user_update_schema)
 @marshal_with(user_update_schema)
 def update_user(**kwargs):
+    email = kwargs.get('email')
+    user = User.query.filter_by(email=email).first()
+    if user:
+        raise InvalidUsage.user_already_exists()
+
     password = kwargs.pop('password', None)
     new_password = kwargs.pop('new_password', None)
-    if password is not None:
-        current_user.set_password(new_password)
+    if password is not None and new_password is not None:
+        if current_user.check_password(password):
+            current_user.set_password(new_password)
+        else:
+            raise InvalidUsage.user_not_found()
 
     current_user.update(**kwargs)
     return current_user
@@ -98,4 +106,4 @@ def login_google_callback():
         user.save()
 
     user.token = create_access_token(user)
-    return redirect(f'{os.environ.get("CLIENT_ROOT", "localhost")}/login?token={user.token}') # noqa
+    return redirect(f'{os.environ.get("CLIENT_ROOT", "localhost")}/login?token={user.token}')  # noqa

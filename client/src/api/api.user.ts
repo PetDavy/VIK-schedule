@@ -1,5 +1,5 @@
 import { API_ROOT, ResponseErrorType } from "./api";
-import { User, UserLogin, UserRegister } from "../types/user";
+import { User, UserLogin, UserRegister, UserUpdate } from "../types/user";
 
 export async function registerUser(
   user: UserRegister
@@ -67,4 +67,28 @@ export async function getUser(accessToken: string): Promise<User> {
     ...userData,
     token: accessToken,
   };
+}
+
+export async function updateUser(
+  user: UserUpdate,
+  token: string
+): Promise<User | ResponseErrorType> {
+  const userResponse: Response = await fetch(`${API_ROOT}/api/user/update`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(user),
+  });
+
+  if (
+    userResponse.status === 200 ||
+    userResponse.status === 422 ||
+    userResponse.status === 400
+  ) {
+    return userResponse.json();
+  }
+
+  throw new Error(userResponse.statusText);
 }
