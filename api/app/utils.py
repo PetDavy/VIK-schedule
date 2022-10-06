@@ -25,15 +25,21 @@ class ValidationUserSchema(ValidationSchema):
         errors = []
         if not is_update:
             super().validate(data)
-        elif 'new_password' in data:
-            self.validate_empty_field({'new_password': data['new_password']})
-            self.validate_password(data['new_password'], errors=errors)
+        else:
+            # data without picture field
+            update_data = {key: value for key, value in data.items() if key != 'picture'} # noqa
+            super().validate(update_data)
 
         if data.get('email'):
             self.validate_email(data['email'], errors=errors)
 
         if data.get('password'):
             self.validate_password(data['password'], errors=errors)
+
+        if data.get('new_password'):
+            self.validate_password(data['new_password'], errors=errors, fieldname='new_password') # noqa
+
+        # todo picture validation
 
         if errors:
             raise InvalidValue.invalid_fields(errors)
@@ -45,7 +51,7 @@ class ValidationUserSchema(ValidationSchema):
         except ValidationError:
             errors.append('email')
 
-    def validate_password(self, password, errors):
+    def validate_password(self, password, errors, fieldname='password'):
         """
             Password must be at least 8 characters long
             and contain at least one
@@ -62,7 +68,7 @@ class ValidationUserSchema(ValidationSchema):
 
             validator(password)
         except ValidationError:
-            errors.append('password')
+            errors.append(fieldname)
 
 
 class Validator(ABC):

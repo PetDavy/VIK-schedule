@@ -7,6 +7,7 @@ import {
 import Home from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/Register";
+import Profile from "../../pages/Profile/Profile";
 
 import { loadUser, endLoad } from "./App.slice";
 import { getUser } from "../../api/api.user";
@@ -43,6 +44,7 @@ function App() {
             {user ? (
               <>
                 <Route path="/" element={<Home />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </>
             ) : (
