@@ -18,7 +18,7 @@ def create_student(name, age, info, **kwargs):
     student_profile = StudentProfile(student=student)
     student.save()
     student_profile.save()
-    return student
+    return student, 201
 
 
 @blueprint.route('/api/student', methods=('PUT',))

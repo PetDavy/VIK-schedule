@@ -8,3 +8,9 @@ export interface Student {
   created_at: string;
   profiles: StudentProfile[];
 }
+
+export interface CreateStudent {
+  name: string;
+  age?: number;
+  info?: string;
+}

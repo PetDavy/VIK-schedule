@@ -4,15 +4,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Home from "../../pages/Home/Home";
+import Header from "../Header/Header";
+import Dashboard from "../../pages/Dashboard/Dashboard";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/Register";
 import Profile from "../../pages/Profile/Profile";
+import Students from "../../pages/Students/Students";
 
 import { loadUser, endLoad } from "./App.slice";
 import { getUser } from "../../api/api.user";
 import { useStoreWithInit } from "../../state/storeHooks";
-import Header from "../Header/Header";
 
 function App() {
   const [{ loading, user }, dispatch] = useStoreWithInit(({ app }) => app, loadData);
@@ -43,8 +44,9 @@ function App() {
           <Routes>
             {user ? (
               <>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Dashboard />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/students" element={<Students />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </>
             ) : (

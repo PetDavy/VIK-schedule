@@ -3,7 +3,7 @@ from marshmallow import fields
 from marshmallow import post_dump
 from marshmallow import validates_schema
 
-from app.utils import UserValidator
+from app.utils.validators.user import UserValidator
 
 
 class UserSchema(Schema):

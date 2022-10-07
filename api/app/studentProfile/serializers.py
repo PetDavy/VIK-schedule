@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, validate, post_dump, validates_schema
 
-from app.utils import SchemaValidation, DataFormatter
+from app.ut import SchemaValidation, DataFormatter
 
 
 class StudentProfileSchema(Schema):
@@ -15,7 +15,7 @@ class StudentProfileSchema(Schema):
         if data.get('class_time') is not None:
             data['class_time'] = DataFormatter.class_time(data['class_time'])
 
-        return {'studentProfile: ': data}
+        return data
 
     @validates_schema
     def validate_inputs(self, data, **kwargs):
