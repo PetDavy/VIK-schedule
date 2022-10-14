@@ -6,9 +6,18 @@ import register from "../pages/Register/Register.slice";
 import profile from "../pages/Profile/Profile.slice";
 import studentsList from "../components/StudentsList/StudentsList.slice";
 import studentForm from "../components/StudentForm/StudentForm.slice";
+import student from "../pages/Student/Student.slice";
 
 export const store = configureStore({
-  reducer: { app, login, register, profile, studentsList, studentForm },
+  reducer: {
+    app,
+    login,
+    register,
+    profile,
+    studentsList,
+    studentForm,
+    student,
+  },
 });
 
 export type Store = ReturnType<typeof store.getState>;

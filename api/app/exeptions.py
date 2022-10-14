@@ -14,6 +14,7 @@ USER_NOT_FOUND = template(data=['User not found'], code=400)
 USER_ALREADY_EXISTS = template(data=['User already exists'], code=400)
 EMPTY_FIELD = template(data=['Empty field'], code=422)
 INVALID_FIELDS = template(data=['Invalid field'], code=422)
+NOT_ALLOWED_TO_UPDATE = template(data=['You are not allowed to update'], code=403) # noqa
 
 
 class InvalidUsage(Exception):
@@ -38,6 +39,10 @@ class InvalidUsage(Exception):
     @classmethod
     def user_already_exists(cls):
         return cls(**USER_ALREADY_EXISTS)
+
+    @classmethod
+    def not_allowed_to_update(cls):
+        return cls(**NOT_ALLOWED_TO_UPDATE)
 
 
 class InvalidValue(InvalidUsage):

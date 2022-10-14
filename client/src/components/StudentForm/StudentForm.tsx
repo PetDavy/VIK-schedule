@@ -43,7 +43,6 @@ function StudentForm() {
 
     try {
       const newStudentData = await createStudent(student, user.token);
-      console.log('newStudentData', newStudentData);
 
       if ('messages' in newStudentData) {
         dispatch(failCreate(newStudentData));

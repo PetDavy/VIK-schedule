@@ -14,3 +14,10 @@ export interface CreateStudent {
   age?: number;
   info?: string;
 }
+
+export interface UpdateStudent {
+  id: number;
+  name?: string;
+  age?: number;
+  info?: string;
+}

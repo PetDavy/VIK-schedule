@@ -7,8 +7,7 @@ from app.exeptions import InvalidValue
 class ValidationStudentSchema(ValidationSchema):
     def validate(self, data, is_update=False):
         errors = []
-        if not is_update:
-            super().validate({'name': data.get('name', '')})
+        super().validate({'name': data.get('name', '')})
 
         if data.get('name'):
             self.validate_name(data['name'], errors=errors)

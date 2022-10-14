@@ -5,6 +5,7 @@ from flask_apispec import use_kwargs, marshal_with
 from .models import Student
 from .serializers import student_schema, students_schema
 from app.studentProfile.models import StudentProfile
+from app.exeptions import InvalidUsage
 
 blueprint = Blueprint('students', __name__)
 
@@ -31,7 +32,7 @@ def update_student(id, **kwargs):
     if student and student.user == current_user:
         return student.update_student(**kwargs)
 
-    raise Exception('You are not allowed to update this student')
+    raise InvalidUsage.not_allowed_to_update()
 
 
 @blueprint.route('/api/students', methods=('GET',))

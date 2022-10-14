@@ -1,6 +1,6 @@
 import { API_ROOT } from "./api";
 import { Student } from "../types/student";
-import { CreateStudent } from "../types/student";
+import { CreateStudent, UpdateStudent } from "../types/student";
 import { ResponseErrorType } from "./api";
 
 export async function loadStudents(accessToken: string): Promise<Student[]> {
@@ -31,6 +31,30 @@ export async function createStudent(
   });
 
   if (studentResponse.status === 201 || studentResponse.status === 422) {
+    return studentResponse.json();
+  }
+
+  throw new Error(studentResponse.statusText);
+}
+
+export async function updateStudent(
+  student: UpdateStudent,
+  accessToken: string
+): Promise<Student | ResponseErrorType> {
+  const studentResponse: Response = await fetch(`${API_ROOT}/api/student`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(student),
+  });
+
+  if (
+    studentResponse.status === 200 ||
+    studentResponse.status === 403 ||
+    studentResponse.status === 422
+  ) {
     return studentResponse.json();
   }
 

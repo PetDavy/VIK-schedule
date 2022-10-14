@@ -50,6 +50,7 @@ function Login() {
       console.warn(error);
     } finally {
       dispatch(endLoggingIn());
+      
     }
   }
 
