@@ -4,6 +4,8 @@ import { useStore } from "../../state/storeHooks";
 import { loginWithGoogle, getUser } from "../../api/api.user";
 import { loadUser } from "../App/App.slice";
 import { startGoogleLoggingIn, endLoggingIn } from "../../pages/Login/Login.slice";
+import { setStudents, startLoad as startStudentLoad } from "../StudentsList/StudentsList.slice";
+import { loadStudents } from "../../api/api.student";
 
 declare global {
   interface Window {
@@ -42,6 +44,7 @@ function GoogleAuth() {
 
       try {
         dispatch(loadUser(await getUser(accessToken)));
+        loadUserStudents(accessToken);
       } catch (error) {
         localStorage.removeItem("token");
         console.error(error);
@@ -50,6 +53,11 @@ function GoogleAuth() {
         dispatch(endLoggingIn());
       }
     };
+  }
+
+  async function loadUserStudents(token: string) {
+    dispatch(startStudentLoad());
+    dispatch(setStudents(await loadStudents(token)));
   }
   
   return (

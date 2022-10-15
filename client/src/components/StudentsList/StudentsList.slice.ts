@@ -8,7 +8,7 @@ interface StudentsListState {
 
 const initialState: StudentsListState = {
   students: [],
-  isLoading: false,
+  isLoading: true,
 }
 
 export const studentsListSlice = createSlice({
@@ -17,6 +17,7 @@ export const studentsListSlice = createSlice({
   reducers: {
     setStudents: (state: StudentsListState, action: PayloadAction<Student[]>) => {
       state.students = action.payload;
+      state.isLoading = false;
     },
     startLoad: (state: StudentsListState) => {
       state.isLoading = true;

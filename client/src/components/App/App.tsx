@@ -4,7 +4,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useEffect } from "react";
 
 import Header from "../Header/Header";
 import Dashboard from "../../pages/Dashboard/Dashboard";
@@ -43,29 +42,16 @@ function App() {
       loadUserStudents(accessToken);
     } catch (error) {
       localStorage.removeItem("token");
-      console.error(error);
-    } finally {
-      dispatch(endUserLoad());
       dispatch(endStudentsLoad());
+      dispatch(endUserLoad());
+      console.error(error);
     }
   }
 
   async function loadUserStudents(token: string) {
-    try {
-      dispatch(startStudentLoad());
-      dispatch(setStudents(await loadStudents(token)));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      dispatch(endStudentsLoad());
-    }
+    dispatch(startStudentLoad());
+    dispatch(setStudents(await loadStudents(token)));
   }
-
-  useEffect(() => {
-    if (user) {
-      loadUserStudents(user.token);
-    }
-  }, [user?.email]);
 
   return (
     <div className="App">

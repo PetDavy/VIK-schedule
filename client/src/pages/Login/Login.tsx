@@ -11,13 +11,20 @@ import {
   updateEmail,
   updatePassword,
 } from "./Login.slice";
+import {
+  setStudents,
+  startLoad as startStudentLoad,
+} from "../../components/StudentsList/StudentsList.slice";
 import { loadUser } from "../../components/App/App.slice";
 import { login } from "../../api/api.user";
+import { loadStudents } from "../../api/api.student";
 
 import { useStore } from "../../state/storeHooks";
 
 function Login() {
-  const [{ user, loggingIn, errors }, dispatch] = useStore(({ login }) => login);
+  const [{ user, loggingIn, errors }, dispatch] = useStore(
+    ({ login }) => login
+  );
 
   const fields = getDefaultFormFields();
 
@@ -36,22 +43,27 @@ function Login() {
     try {
       const userData = await login(user);
 
-      if ('messages' in userData) {
+      if ("messages" in userData) {
         dispatch(failLoggingIn(userData));
       }
 
-      if ('token' in userData) {
-        localStorage.setItem('token', userData.token);
+      if ("token" in userData) {
+        const { token } = userData;
+        localStorage.setItem("token", token);
         dispatch(loadUser(userData));
         dispatch(successLoggingIn());
+        loadUserStudents(token);
       }
-
     } catch (error) {
       console.warn(error);
     } finally {
       dispatch(endLoggingIn());
-      
     }
+  }
+
+  async function loadUserStudents(token: string) {
+    dispatch(startStudentLoad());
+    dispatch(setStudents(await loadStudents(token)));
   }
 
   return (

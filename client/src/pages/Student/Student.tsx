@@ -16,19 +16,18 @@ import {
 import { setStudents } from "../../components/StudentsList/StudentsList.slice";
 
 import Form from "../../components/Form/Form";
+import StudentProfiles from "../../components/StudentProfiles/StudentProfiles";
 
 function Student() {
   const [{ user }] = useStore(({ app }) => app);
-  const [{ students, isLoading }, dispatch] = useStore(
-    ({ studentsList }) => studentsList
-  );
+  const [{ students, isLoading }, dispatch] = useStore(({ studentsList }) => studentsList);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (isLoading) {
       return;
     }
-
+    
     const student = students.find((student) => student.id === Number(id));
 
     if (!student) {
@@ -105,6 +104,7 @@ function Student() {
             onChange={updateStudentInfoFileds}
             onSubmit={updateStudentIndo}
           />
+          <StudentProfiles />
         </div>
       )}
     </div>
