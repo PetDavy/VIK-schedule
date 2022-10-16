@@ -9,7 +9,7 @@ from .serializers import student_profile_schema
 blueprint = Blueprint('studentProfile', __name__)
 
 
-@blueprint.route('/api/student/profile/', methods=('POST',))
+@blueprint.route('/api/student/profile', methods=('POST',))
 @jwt_required()
 @use_kwargs(student_profile_schema)
 @marshal_with(student_profile_schema)
@@ -27,7 +27,7 @@ def create_student_profile(student_id, class_time, class_price):
     raise Exception('You are not allowed to create this student profile')
 
 
-@blueprint.route('/api/student/profile/', methods=('PUT',))
+@blueprint.route('/api/student/profile', methods=('PUT',))
 @jwt_required()
 @use_kwargs(student_profile_schema)
 @marshal_with(student_profile_schema)

@@ -7,3 +7,9 @@ export interface StudentProfile {
   created_at: string;
   class_time: ClassTime;
 }
+
+export interface UpdateStudentProfile {
+  id: number;
+  class_price?: number;
+  class_time?: ClassTime;
+}
