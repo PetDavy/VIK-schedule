@@ -4,7 +4,9 @@ import { StudentProfile as StudentProfileType } from "../../types/studentProfile
 import { StudentProfileForm } from "./StudentProfiles.slice";
 import {
   setStudentProfiles,
+  setStudentProfileForms,
   setActiveStudentProfile,
+  setActiveStudentProfileForm,
   startNewProfile,
 } from "./StudentProfiles.slice";
 import { useEffect } from "react";
@@ -13,7 +15,7 @@ import StudentProfile from "./StudentProfile";
 
 function StudentProfiles() {
   const [{ student }, dispatch] = useStore(({ student }) => student);
-  const [{ studentProfiles, activeStudentProfile }] = useStore(({ studentProfiles }) => studentProfiles);
+  const [{ studentProfiles, studentProfileForms, activeStudentProfileForm }] = useStore(({ studentProfiles }) => studentProfiles);
 
   useEffect(() => {
     setUpStudentProfiles();
@@ -24,13 +26,15 @@ function StudentProfiles() {
 
     if (profiles.length) {
       dispatch(setStudentProfiles(profiles));
+      dispatch(setStudentProfileForms(profiles));
       dispatch(setActiveStudentProfile(profiles[0]));
+      dispatch(setActiveStudentProfileForm(profiles[0]));
     }
   }
 
   function handleTabClick(profile: StudentProfileForm) {
-    if (activeStudentProfile.id !== profile.id) {
-      dispatch(setActiveStudentProfile(profile));
+    if (activeStudentProfileForm.id !== profile.id) {
+      dispatch(setActiveStudentProfileForm(profile));
     }
   }
 
@@ -42,7 +46,7 @@ function StudentProfiles() {
     <div className="Profiles">
       <h3>Profiles</h3>
       <div className="Profiles__tabs" style={{ display: "flex" }}>
-        {studentProfiles.map((profile: StudentProfileForm) => (
+        {studentProfileForms.map((profile: StudentProfileForm) => (
           <div
             className="Profiles__tab"
             key={profile.id}
