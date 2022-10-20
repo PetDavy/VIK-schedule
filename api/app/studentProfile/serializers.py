@@ -1,6 +1,7 @@
-from marshmallow import Schema, fields, validate, post_dump, validates_schema
+from marshmallow import Schema, fields, post_dump, validates_schema
 
-from app.ut import SchemaValidation, DataFormatter
+from app.ut import DataFormatter
+from app.utils.validators.studnetProfile import StudentProfileValidator
 
 
 class StudentProfileSchema(Schema):
@@ -8,8 +9,9 @@ class StudentProfileSchema(Schema):
     student_id = fields.Int()
     created_at = fields.DateTime(dump_only=True)
     class_time = fields.Str()
-    class_price = fields.Int(validate=validate.Range(min=1, max=300))
+    class_price = fields.Int()
 
+    # todo: update this
     @post_dump
     def create_student_profile(self, data, **kwargs):
         if data.get('class_time') is not None:
@@ -18,9 +20,8 @@ class StudentProfileSchema(Schema):
         return data
 
     @validates_schema
-    def validate_inputs(self, data, **kwargs):
-        if data.get('class_time') is not None:
-            SchemaValidation.class_time(data.get('class_time'))
+    def validate_student_profile(self, data, **kwargs):
+        StudentProfileValidator.validate(data)
 
 
 student_profile_schema = StudentProfileSchema()

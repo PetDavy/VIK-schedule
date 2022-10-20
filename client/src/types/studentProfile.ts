@@ -11,5 +11,9 @@ export interface StudentProfile {
 export interface UpdateStudentProfile {
   id: number;
   class_price?: number;
-  class_time?: ClassTime[];
+}
+
+export interface CreateStudentProfile {
+  id: string | number;
+  class_price: number;
 }

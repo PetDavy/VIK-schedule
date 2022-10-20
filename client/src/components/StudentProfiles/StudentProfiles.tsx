@@ -36,6 +36,10 @@ function StudentProfiles() {
     if (activeStudentProfileForm.id !== profile.id) {
       dispatch(setActiveStudentProfileForm(profile));
     }
+
+    const clickedProfile = studentProfiles.find(studentProfile => studentProfile.id === profile.id);
+
+    dispatch(setActiveStudentProfile(clickedProfile || null));
   }
 
   function addNewProfile() {

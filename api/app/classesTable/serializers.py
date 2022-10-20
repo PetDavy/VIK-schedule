@@ -11,5 +11,4 @@ class ClassTableSchema(Schema):
 
     @post_dump
     def dump_class(self, data, **kwargs):
-
-        return {'classTable: ': data}
+        return data

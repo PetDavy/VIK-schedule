@@ -6,7 +6,6 @@ import { ClassTime } from "../../types/classTime";
 export interface StudentProfileForm {
   id: number | string;
   class_price: number;
-  class_time: ClassTime[]| null;
   // todo: add flag if new student profile instead of string id
 }
 
@@ -25,7 +24,6 @@ const initialState: StudentProfilesState = {
   activeStudentProfileForm: {
     id: 0,
     class_price: 0,
-    class_time: null,
   },
   errors: {
     messages: [],
@@ -52,12 +50,11 @@ export const studentProfilesSlice = createSlice({
           return {
             id: profile.id,
             class_price: profile.class_price,
-            class_time: profile.class_time,
           };
         }
       );
     },
-    setActiveStudentProfile: (state, action: PayloadAction<StudentProfile>) => {
+    setActiveStudentProfile: (state, action: PayloadAction<StudentProfile | null>) => {
       state.activeStudentProfile = action.payload;
     },
     setActiveStudentProfileForm: (
@@ -66,7 +63,6 @@ export const studentProfilesSlice = createSlice({
     ) => {
       state.activeStudentProfileForm.id = action.payload.id;
       state.activeStudentProfileForm.class_price = action.payload.class_price;
-      state.activeStudentProfileForm.class_time = action.payload.class_time;
     },
     startNewProfile: (state) => {
       const newProfilesCount = state.studentProfileForms.filter((profile) =>
@@ -75,12 +71,16 @@ export const studentProfilesSlice = createSlice({
       const newProfile: StudentProfileForm = {
         id: `new-${newProfilesCount + 1}`,
         class_price: 0,
-        class_time: null,
       };
 
       state.studentProfileForms.push(newProfile);
       state.activeStudentProfileForm = newProfile;
       state.activeStudentProfile = null;
+    },
+    removeNewProfile: (state, action: PayloadAction<string>) => {
+      state.studentProfileForms = state.studentProfileForms.filter(
+        (profile) => profile.id !== action.payload
+      );
     },
     updateClassPrice: (state, action: PayloadAction<number>) => {
       state.activeStudentProfileForm.class_price = action.payload;
@@ -93,7 +93,6 @@ export const studentProfilesSlice = createSlice({
       const updatedProfile = {
         id: action.payload.id,
         class_price: action.payload.class_price,
-        class_time: action.payload.class_time,
       };
       const profileIndex = state.studentProfiles.findIndex(
         (profile) => profile.id === updatedProfile.id
@@ -114,6 +113,25 @@ export const studentProfilesSlice = createSlice({
     failUpdate: (state, action: PayloadAction<ResponseErrorType>) => {
       state.errors = action.payload;
     },
+    successCreate: (state, action: PayloadAction<StudentProfile>) => {
+      state.studentProfiles.push(action.payload);
+      state.studentProfileForms.push({
+        id: action.payload.id,
+        class_price: action.payload.class_price,
+      });
+      state.activeStudentProfile = action.payload;
+      state.activeStudentProfileForm = {
+        id: action.payload.id,
+        class_price: action.payload.class_price,
+      };
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
+    },
+    failCreate: (state, action: PayloadAction<ResponseErrorType>) => {
+      state.errors = action.payload;
+    }
   },
 });
 
@@ -123,9 +141,12 @@ export const {
   setActiveStudentProfile,
   setActiveStudentProfileForm,
   startNewProfile,
+  removeNewProfile,
   updateClassPrice,
   successUpdate,
   failUpdate,
+  successCreate,
+  failCreate,
 } = studentProfilesSlice.actions;
 
 export default studentProfilesSlice.reducer;

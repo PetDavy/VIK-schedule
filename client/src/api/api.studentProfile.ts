@@ -1,12 +1,38 @@
 import { API_ROOT } from "./api";
-import { StudentProfile, UpdateStudentProfile } from "../types/studentProfile";
+import { StudentProfile, UpdateStudentProfile, CreateStudentProfile } from "../types/studentProfile";
 import { ResponseErrorType } from "./api";
+
+
+export async function creatStudentProfile(
+  studentId: number,
+  studentProfile: CreateStudentProfile,
+  accessToken: string
+): Promise<StudentProfile | ResponseErrorType> {
+  const profileData = {
+    student_id: studentId,
+    class_price: studentProfile.class_price,
+  }
+
+  const response = await fetch(`${API_ROOT}/api/student/profile`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(profileData),
+  });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    return await response.json();
+  }
+}
 
 export async function updateStudentProfile(
   studentProfile: UpdateStudentProfile,
   accessToken: string
 ): Promise<StudentProfile | ResponseErrorType> {
-  console.log("updateStudentProfile", studentProfile);
   const studentProfileResponse: Response = await fetch(
     `${API_ROOT}/api/student/profile`,
     {

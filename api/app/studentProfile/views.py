@@ -14,18 +14,17 @@ blueprint = Blueprint('studentProfile', __name__)
 @jwt_required()
 @use_kwargs(student_profile_schema)
 @marshal_with(student_profile_schema)
-def create_student_profile(student_id, class_time, class_price):
+def create_student_profile(student_id, class_price):
     student = Student.query.get(student_id)
     if student and student.user == current_user:
         student_profile = StudentProfile(
           student=student,
-          class_time=class_time,
           class_price=class_price
         )
         student_profile.save()
         return student_profile
 
-    raise Exception('You are not allowed to create this student profile')
+    raise InvalidUsage.not_allowed_to_update()
 
 
 @blueprint.route('/api/student/profile', methods=('PUT',))
@@ -41,6 +40,7 @@ def update_student_profile(id, **kwargs):
     raise InvalidUsage.not_allowed_to_update()
 
 
+# todo: remove
 @blueprint.route('/api/student/profile/table', methods=('PUT',))
 @jwt_required()
 @use_kwargs(student_profile_schema)

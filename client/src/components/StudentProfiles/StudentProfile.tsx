@@ -6,16 +6,22 @@ import {
   updateClassPrice,
   successUpdate,
   failUpdate,
+  successCreate,
+  failCreate,
+  removeNewProfile,
 } from "./StudentProfiles.slice";
 
-import { updateStudentProfile } from "../../api/api.studentProfile";
+import { updateStudentProfile, creatStudentProfile } from "../../api/api.studentProfile";
 
 import Form from "../Form/Form";
 import ClassTimePicker from "../ClassTime/ClassTimePicker";
 import ClassTimeInfo from "../ClassTime/ClassTimeInfo";
+import { Student } from "../../types/student";
+import { User } from "../../types/user";
 
 function StudentProfile() {
   const [{ user }] = useStore(({ app }) => app);
+  const [{ student }] = useStore(({ student }) => student);
   const [{ activeStudentProfile, activeStudentProfileForm, errors }, dispatch] = useStore(
     ({ studentProfiles }) => studentProfiles
   );
@@ -34,29 +40,51 @@ function StudentProfile() {
     if (typeof activeStudentProfileForm.id === "number") {
       updateProfileInfo(activeStudentProfileForm.id);
     }
+    if (typeof activeStudentProfileForm.id === "string") {
+      createProfile(activeStudentProfileForm.id); 
+    }
+  }
+
+  async function createProfile(tempId: string) {
+    const { id } = student as Student;
+    const { token } = user as User;
+
+    try {
+      const createdProfile = await creatStudentProfile(
+        id,
+        activeStudentProfileForm,
+        token
+      );
+
+      if ("messages" in createdProfile) {
+        dispatch(failCreate(createdProfile));
+      }
+      
+      if ("id" in createdProfile) {
+        dispatch(removeNewProfile(tempId));
+        dispatch(successCreate(createdProfile));
+      }
+    } catch(e) {
+      console.log(e);
+    }
   }
 
   async function updateProfileInfo(id: number) {
-    if (!user || !activeStudentProfileForm.id) {
-      return;
-    }
-
-    // filter out class_time because it's null
-    const { class_time, ...rest } = activeStudentProfileForm; // change this later
+    const { token } = user as User;
 
     try {
       const updatedProfile = await updateStudentProfile(
         {
-          ...rest,
+          ...activeStudentProfileForm,
           ...(activeStudentProfileForm.class_price
             ? { class_price: Number(activeStudentProfileForm.class_price) }
             : {}),
           id,
         },
-        user.token
+        token
       );
 
-      if ("message" in updatedProfile) {
+      if ("messages" in updatedProfile) {
         dispatch(failUpdate(updatedProfile));
       }
 
