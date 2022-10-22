@@ -1,7 +1,7 @@
 import React from "react";
 import { useStore } from "../../state/storeHooks";
 import { FormField, createFormField } from "../../types/formField";
-import { formatFormFromObject } from "../../utils/forms";
+import { formatFormFromObject, formatFormToObject } from "../../utils/forms";
 import {
   updateClassPrice,
   successUpdate,
@@ -12,16 +12,19 @@ import {
 } from "./StudentProfiles.slice";
 
 import { updateStudentProfile, creatStudentProfile } from "../../api/api.studentProfile";
+import { updateScheduleDate } from "../../api/api.scheduleDate";
 
 import Form from "../Form/Form";
-import ClassTimePicker from "../ClassTime/ClassTimePicker";
-import ClassTimeInfo from "../ClassTime/ClassTimeInfo";
+import ScheduleDatesPicker from "../ScheduleDates/ScheduleDatesPicker";
+import ScheduleDatesInfo from "../ScheduleDates/ScheduleDatesInfo";
 import { Student } from "../../types/student";
 import { User } from "../../types/user";
+import { StudentProfile as StudentProfileType } from "../../types/studentProfile";
 
 function StudentProfile() {
   const [{ user }] = useStore(({ app }) => app);
   const [{ student }] = useStore(({ student }) => student);
+  const [{ days, openedDay }] = useStore(({ scheduleDates }) => scheduleDates);
   const [{ activeStudentProfile, activeStudentProfileForm, errors }, dispatch] = useStore(
     ({ studentProfiles }) => studentProfiles
   );
@@ -41,7 +44,7 @@ function StudentProfile() {
       updateProfileInfo(activeStudentProfileForm.id);
     }
     if (typeof activeStudentProfileForm.id === "string") {
-      createProfile(activeStudentProfileForm.id); 
+      createProfile(activeStudentProfileForm.id);
     }
   }
 
@@ -75,10 +78,7 @@ function StudentProfile() {
     try {
       const updatedProfile = await updateStudentProfile(
         {
-          ...activeStudentProfileForm,
-          ...(activeStudentProfileForm.class_price
-            ? { class_price: Number(activeStudentProfileForm.class_price) }
-            : {}),
+          ...formatFormToObject(activeStudentProfileForm, fields),
           id,
         },
         token
@@ -90,11 +90,29 @@ function StudentProfile() {
 
       if ("id" in updatedProfile) {
         dispatch(successUpdate(updatedProfile));
+        updateScheduleDates(updatedProfile);
       }
     } catch (err) {
       console.log(err);
     }
   }
+
+  async function updateScheduleDates(updatedProfile: StudentProfileType) {
+    const { token } = user as User;
+
+    for (const date of updatedProfile.schedule_dates) {
+      if (days[date.day]) {
+        const updatingObject = {
+          time: days[date.day]!.time,
+          duration: days[date.day]!.duration,
+        }
+
+        const res = await updateScheduleDate(date.id, updatingObject, token);
+        console.log("res: ", res);
+      }
+    }
+  }
+
 
   function renderProfileInfo() {
     const profile = activeStudentProfile || activeStudentProfileForm;
@@ -109,7 +127,7 @@ function StudentProfile() {
         {profile.class_price}
         <br />
         <i>time: </i>
-        <ClassTimeInfo />
+        <ScheduleDatesInfo />
         <hr />
       </>
     );
@@ -125,8 +143,9 @@ function StudentProfile() {
         buttonText="Update"
         onChange={updateFields}
         onSubmit={handleSubmit}
-      />
-      <ClassTimePicker />
+      >
+        <ScheduleDatesPicker />
+      </Form>
     </div>
   );
 }

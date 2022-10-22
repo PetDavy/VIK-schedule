@@ -8,6 +8,7 @@ import studentsList from "../components/StudentsList/StudentsList.slice";
 import studentForm from "../components/StudentForm/StudentForm.slice";
 import student from "../pages/Student/Student.slice";
 import studentProfiles from "../components/StudentProfiles/StudentProfiles.slice";
+import scheduleDates from "../components/ScheduleDates/StudentDates.slice";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     studentForm,
     student,
     studentProfiles,
+    scheduleDates,
   },
 });
 

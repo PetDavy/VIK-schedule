@@ -10,7 +10,6 @@ class StudentProfile(db.Model):
         backref=db.backref('profiles', lazy='dynamic')
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    class_time = db.Column(db.String(600))
     class_price = db.Column(db.Integer)
 
     def __init__(self, student, **kwargs):

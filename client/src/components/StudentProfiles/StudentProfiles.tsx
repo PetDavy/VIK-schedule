@@ -2,6 +2,7 @@ import { useStore, useStoreWithInit } from "../../state/storeHooks";
 import { Student } from "../../types/student";
 import { StudentProfile as StudentProfileType } from "../../types/studentProfile";
 import { StudentProfileForm } from "./StudentProfiles.slice";
+import { setScheduleDates } from "../ScheduleDates/StudentDates.slice";
 import {
   setStudentProfiles,
   setStudentProfileForms,
@@ -29,12 +30,14 @@ function StudentProfiles() {
       dispatch(setStudentProfileForms(profiles));
       dispatch(setActiveStudentProfile(profiles[0]));
       dispatch(setActiveStudentProfileForm(profiles[0]));
+      dispatch(setScheduleDates(profiles[0].schedule_dates));
     }
   }
 
   function handleTabClick(profile: StudentProfileForm) {
     if (activeStudentProfileForm.id !== profile.id) {
       dispatch(setActiveStudentProfileForm(profile));
+      dispatch(setScheduleDates(profile.schedule_dates));
     }
 
     const clickedProfile = studentProfiles.find(studentProfile => studentProfile.id === profile.id);

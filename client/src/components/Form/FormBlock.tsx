@@ -1,27 +1,26 @@
-import { FC, PropsWithChildren, FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import { FormField as FormFieldType } from "../../types/formField";
 import { ResponseErrorType } from "../../api/api";
 
 import FormField from "../FormField/FormField";
 
-interface FormProps extends PropsWithChildren {
+interface FormProps {
   fields: FormFieldType[];
   formObject: Record<string, string>;
   errors: ResponseErrorType;
   buttonText: string;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: FormEvent<HTMLButtonElement>) => void;
   onChange: (name: string, value: string) => void;
   noButton?: boolean;
 }
 
-const Form: FC<FormProps> = ({
+const FormBlock: FC<FormProps> = ({
   fields,
   formObject,
   errors,
   buttonText,
   onSubmit,
   onChange,
-  children,
   noButton,
 }) => {
   function handleUpdateField(
@@ -32,7 +31,7 @@ const Form: FC<FormProps> = ({
   }
 
   return (
-    <form className="Form" onSubmit={onSubmit}>
+    <div className="FormBlock">
       {errors.messages.map((message) => (
         <div className="error" key={message}>
           {message}
@@ -52,12 +51,11 @@ const Form: FC<FormProps> = ({
           invalid={!!errors.fields?.includes(filed.name)}
         />
       ))}
-      {children}
       {!noButton && (
-        <button type="submit">{buttonText}</button>
+        <button onClick={onSubmit}>{buttonText}</button>
       )}
-    </form>
+    </div>
   );
 };
 
-export default Form;
+export default FormBlock;

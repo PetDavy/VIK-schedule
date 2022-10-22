@@ -1,11 +1,11 @@
-import { ClassTime } from "./classTime";
+import { ScheduleDate } from "./scheduleDate";
 
 export interface StudentProfile {
   id: number;
   student_id: number;
   class_price: number;
   created_at: string;
-  class_time: ClassTime[];
+  schedule_dates: ScheduleDate[];
 }
 
 export interface UpdateStudentProfile {

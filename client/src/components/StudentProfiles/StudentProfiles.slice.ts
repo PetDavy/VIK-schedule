@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ResponseErrorType } from "../../api/api";
 import { StudentProfile } from "../../types/studentProfile";
-import { ClassTime } from "../../types/classTime";
+import { ScheduleDate } from "../../types/scheduleDate";
 
 export interface StudentProfileForm {
   id: number | string;
   class_price: number;
+  schedule_dates: ScheduleDate[];
   // todo: add flag if new student profile instead of string id
 }
 
@@ -24,6 +25,7 @@ const initialState: StudentProfilesState = {
   activeStudentProfileForm: {
     id: 0,
     class_price: 0,
+    schedule_dates: [],
   },
   errors: {
     messages: [],
@@ -50,6 +52,7 @@ export const studentProfilesSlice = createSlice({
           return {
             id: profile.id,
             class_price: profile.class_price,
+            schedule_dates: profile.schedule_dates,
           };
         }
       );
@@ -71,6 +74,7 @@ export const studentProfilesSlice = createSlice({
       const newProfile: StudentProfileForm = {
         id: `new-${newProfilesCount + 1}`,
         class_price: 0,
+        schedule_dates: [],
       };
 
       state.studentProfileForms.push(newProfile);
@@ -93,6 +97,7 @@ export const studentProfilesSlice = createSlice({
       const updatedProfile = {
         id: action.payload.id,
         class_price: action.payload.class_price,
+        schedule_dates: action.payload.schedule_dates,
       };
       const profileIndex = state.studentProfiles.findIndex(
         (profile) => profile.id === updatedProfile.id
@@ -118,11 +123,13 @@ export const studentProfilesSlice = createSlice({
       state.studentProfileForms.push({
         id: action.payload.id,
         class_price: action.payload.class_price,
+        schedule_dates: action.payload.schedule_dates,
       });
       state.activeStudentProfile = action.payload;
       state.activeStudentProfileForm = {
         id: action.payload.id,
         class_price: action.payload.class_price,
+        schedule_dates: action.payload.schedule_dates,
       };
       state.errors = {
         messages: [],

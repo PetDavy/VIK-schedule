@@ -83,7 +83,7 @@ function Student() {
   }
 
   return (
-    <div className="Student">
+    <div className="Student" style={{maxWidth: '1400px', margin: '0 auto'}}>
       {isLoading && <div>Loading...</div>}
       {!isLoading && student && (
         <div>

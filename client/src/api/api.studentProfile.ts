@@ -22,6 +22,7 @@ export async function creatStudentProfile(
     body: JSON.stringify(profileData),
   });
 
+  // todo: change this
   if (response.ok) {
     return await response.json();
   } else {
