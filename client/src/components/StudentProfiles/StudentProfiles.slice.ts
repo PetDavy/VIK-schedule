@@ -93,6 +93,19 @@ export const studentProfilesSlice = createSlice({
         fields: [],
       }
     },
+    updateScheduleDates: (state, action: PayloadAction<ScheduleDate[]>) => {
+      state.activeStudentProfileForm.schedule_dates = action.payload;
+      state.activeStudentProfile!.schedule_dates = action.payload;
+
+      const activeProfileIndex = state.studentProfileForms.findIndex(
+        (profile) => profile.id === state.activeStudentProfileForm.id
+      );
+      const activeProfileFormIndex = state.studentProfileForms.findIndex(
+        (profile) => profile.id === state.activeStudentProfileForm.id
+      )
+      state.studentProfileForms[activeProfileIndex] = state.activeStudentProfileForm;
+      state.studentProfiles[activeProfileFormIndex] = state.activeStudentProfile!;
+    },
     successUpdate: (state, action: PayloadAction<StudentProfile>) => {
       const updatedProfile = {
         id: action.payload.id,
@@ -150,6 +163,7 @@ export const {
   startNewProfile,
   removeNewProfile,
   updateClassPrice,
+  updateScheduleDates,
   successUpdate,
   failUpdate,
   successCreate,

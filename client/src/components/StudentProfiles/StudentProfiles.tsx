@@ -2,7 +2,7 @@ import { useStore, useStoreWithInit } from "../../state/storeHooks";
 import { Student } from "../../types/student";
 import { StudentProfile as StudentProfileType } from "../../types/studentProfile";
 import { StudentProfileForm } from "./StudentProfiles.slice";
-import { setScheduleDates } from "../ScheduleDates/StudentDates.slice";
+import { setScheduleDates, clearScheduleDates } from "../ScheduleDates/StudentDates.slice";
 import {
   setStudentProfiles,
   setStudentProfileForms,
@@ -47,6 +47,7 @@ function StudentProfiles() {
 
   function addNewProfile() {
     dispatch(startNewProfile());
+    dispatch(clearScheduleDates());
   }
 
   return (

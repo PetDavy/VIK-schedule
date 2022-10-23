@@ -9,10 +9,16 @@ import {
   successCreate,
   failCreate,
   removeNewProfile,
+  updateScheduleDates,
 } from "./StudentProfiles.slice";
+import { setDay } from "../ScheduleDates/StudentDates.slice";
+import { ScheduleDate } from "../../types/scheduleDate";
 
-import { updateStudentProfile, creatStudentProfile } from "../../api/api.studentProfile";
-import { updateScheduleDate } from "../../api/api.scheduleDate";
+import {
+  updateStudentProfile,
+  creatStudentProfile,
+} from "../../api/api.studentProfile";
+import { updateScheduleDate, deleteScheduleDate, createScheduleDate } from "../../api/api.scheduleDate";
 
 import Form from "../Form/Form";
 import ScheduleDatesPicker from "../ScheduleDates/ScheduleDatesPicker";
@@ -25,9 +31,8 @@ function StudentProfile() {
   const [{ user }] = useStore(({ app }) => app);
   const [{ student }] = useStore(({ student }) => student);
   const [{ days, openedDay }] = useStore(({ scheduleDates }) => scheduleDates);
-  const [{ activeStudentProfile, activeStudentProfileForm, errors }, dispatch] = useStore(
-    ({ studentProfiles }) => studentProfiles
-  );
+  const [{ activeStudentProfile, activeStudentProfileForm, errors }, dispatch] =
+    useStore(({ studentProfiles }) => studentProfiles);
 
   const fields = getDefaultInfoFormFields();
 
@@ -62,12 +67,12 @@ function StudentProfile() {
       if ("messages" in createdProfile) {
         dispatch(failCreate(createdProfile));
       }
-      
+
       if ("id" in createdProfile) {
         dispatch(removeNewProfile(tempId));
         dispatch(successCreate(createdProfile));
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
   }
@@ -90,29 +95,95 @@ function StudentProfile() {
 
       if ("id" in updatedProfile) {
         dispatch(successUpdate(updatedProfile));
-        updateScheduleDates(updatedProfile);
+        setDates(updatedProfile);
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function updateScheduleDates(updatedProfile: StudentProfileType) {
+  async function setDates(updatedProfile: StudentProfileType) {
     const { token } = user as User;
 
     for (const date of updatedProfile.schedule_dates) {
       if (days[date.day]) {
-        const updatingObject = {
-          time: days[date.day]!.time,
-          duration: days[date.day]!.duration,
-        }
+        const { time, duration } = days[date.day] as ScheduleDate;
 
-        const res = await updateScheduleDate(date.id, updatingObject, token);
-        console.log("res: ", res);
+        if (time !== date.time || duration !== date.duration) {
+          await updateSingelDate(date, token);
+        }
+      } else {
+        await deleteSingleDate(date, token);
       }
+    }
+
+    const dates = Object.values(days).filter((day) => day !== null);
+    
+    for (const currDate of dates as ScheduleDate[]) {
+      if (!updatedProfile.schedule_dates.find((date) => date.day === currDate.day)) {
+        await createSingleDate(currDate, token);
+      }
+    }
+
+    dispatch(updateScheduleDates(dates as ScheduleDate[]));
+  }
+
+  async function updateSingelDate(date: ScheduleDate, token: string) {
+    const updatingObject = {
+      time: days[date.day]!.time,
+      duration: days[date.day]!.duration,
+    };
+
+    try {
+      const updatedDate = await updateScheduleDate(
+        date.id,
+        updatingObject,
+        token
+      );
+
+      if ("messages" in updatedDate) {
+        dispatch(failUpdate(updatedDate));
+      }
+
+      if ("id" in updatedDate) {
+        dispatch(setDay(updatedDate));
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
+  async function deleteSingleDate(date: ScheduleDate, token: string) {
+    try {
+      const deletedDate = await deleteScheduleDate(date.id, token);
+
+      if ("messages" in deletedDate) {
+        dispatch(failUpdate(deletedDate));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function createSingleDate(date: ScheduleDate, token: string) {
+    try {
+      const { id } = activeStudentProfile as StudentProfileType;
+      const formatedDate = {day: date.day, time: date.time, duration: date.duration};
+      const createdDate = await createScheduleDate(id, formatedDate, token);
+
+      if ("messages" in createdDate) {
+        dispatch(failUpdate(createdDate));
+      }
+
+      if ("id" in createdDate) {
+        dispatch(setDay(createdDate));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  
 
   function renderProfileInfo() {
     const profile = activeStudentProfile || activeStudentProfileForm;

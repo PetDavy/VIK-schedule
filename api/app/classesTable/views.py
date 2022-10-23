@@ -17,7 +17,6 @@ def add_class(profile_id, **kwargs):
     student_profile = StudentProfile.query.get(profile_id)
 
     if student_profile and student_profile.student.user == current_user:
-        kwargs['price'] = kwargs.get('price', student_profile.class_price)
         class_table = ClassTable(student_profile=student_profile, **kwargs)
         class_table.save()
 
@@ -39,7 +38,7 @@ def delete_class(class_table_id):
     if current_profile.student.user == current_user:
         class_table.delete()
 
-        return jsonify({'message': f'Class {class_table_id} has been deleted'})
+        return jsonify({'id': class_table_id, 'method': 'DELETE'})
 
     raise Exception('You are not allowed to delete this class')
 

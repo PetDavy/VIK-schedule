@@ -9,7 +9,12 @@ export interface ScheduleDate {
   created_at: string;
 }
 
-export interface UpdatescheduleDate {
+export interface CreateScheduleDate {
+  time: string;
+  duration: number;
+}
+
+export interface UpdateScheduleDate {
   time?: string;
   duration?: number;
 }

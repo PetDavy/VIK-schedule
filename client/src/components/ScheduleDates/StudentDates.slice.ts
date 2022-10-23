@@ -12,7 +12,7 @@ interface ScheduleDatesState {
     thu: ScheduleDate | null;
     fri: ScheduleDate | null;
     sat: ScheduleDate | null;
-  },
+  };
   openedDay: ScheduleDate | null;
   errors: ResponseErrorType;
 }
@@ -31,8 +31,8 @@ const initialState: ScheduleDatesState = {
   errors: {
     messages: [],
     fields: [],
-  }
-}
+  },
+};
 
 export const scheduleDatesSlice = createSlice({
   name: "scheduleDates",
@@ -47,13 +47,14 @@ export const scheduleDatesSlice = createSlice({
         thu: null,
         fri: null,
         sat: null,
-      }
+      };
+      state.openedDay = null;
     },
     clearErrors: (state) => {
       state.errors = {
         messages: [],
         fields: [],
-      }
+      };
     },
     setScheduleDates: (state, action: PayloadAction<ScheduleDate[]>) => {
       scheduleDatesSlice.caseReducers.clearScheduleDates(state);
@@ -62,6 +63,13 @@ export const scheduleDatesSlice = createSlice({
       action.payload.forEach((date) => {
         state.days[date.day] = date;
       });
+    },
+    setDay: (state, action: PayloadAction<ScheduleDate>) => {
+      state.days[action.payload.day] = action.payload;
+      state.openedDay = action.payload;
+    },
+    deleteDay: (state, action: PayloadAction<dayType>) => {
+      state.days[action.payload] = null;
     },
     setOpenedDay: (state, action: PayloadAction<ScheduleDate | null>) => {
       state.openedDay = action.payload;
@@ -97,10 +105,19 @@ export const scheduleDatesSlice = createSlice({
     },
     setErrors: (state, action: PayloadAction<ResponseErrorType>) => {
       state.errors = action.payload;
-    }
-  }
+    },
+  },
 });
 
-export const { setScheduleDates, setOpenedDay, setClassTime, setClassDuration, addDay } = scheduleDatesSlice.actions;
+export const {
+  setScheduleDates,
+  setDay,
+  setOpenedDay,
+  setClassTime,
+  setClassDuration,
+  addDay,
+  deleteDay,
+  clearScheduleDates,
+} = scheduleDatesSlice.actions;
 
 export default scheduleDatesSlice.reducer;
