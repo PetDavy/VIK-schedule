@@ -35,6 +35,19 @@ def update_student(id, **kwargs):
     raise InvalidUsage.not_allowed_to_update()
 
 
+@blueprint.route('/api/student/<int:id>', methods=('DELETE',))
+@jwt_required()
+@marshal_with(student_schema)
+def delete_student(id):
+    student = Student.query.get(id)
+
+    if student and student.user == current_user:
+        student.delete()
+        return student
+
+    raise InvalidUsage.not_allowed_to_delete()
+
+
 @blueprint.route('/api/students', methods=('GET',))
 @jwt_required()
 @marshal_with(students_schema)

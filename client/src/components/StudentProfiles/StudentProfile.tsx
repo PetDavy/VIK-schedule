@@ -8,8 +8,12 @@ import {
   failUpdate,
   successCreate,
   failCreate,
+  successDelete,
+  failDelete,
   removeNewProfile,
   updateScheduleDates,
+  deleteProfile,
+  StudentProfileForm,
 } from "./StudentProfiles.slice";
 import { setDay } from "../ScheduleDates/StudentDates.slice";
 import { ScheduleDate } from "../../types/scheduleDate";
@@ -17,6 +21,7 @@ import { ScheduleDate } from "../../types/scheduleDate";
 import {
   updateStudentProfile,
   creatStudentProfile,
+  deleteStudentProfile,
 } from "../../api/api.studentProfile";
 import { updateScheduleDate, deleteScheduleDate, createScheduleDate } from "../../api/api.scheduleDate";
 
@@ -31,7 +36,7 @@ function StudentProfile() {
   const [{ user }] = useStore(({ app }) => app);
   const [{ student }] = useStore(({ student }) => student);
   const [{ days, openedDay }] = useStore(({ scheduleDates }) => scheduleDates);
-  const [{ activeStudentProfile, activeStudentProfileForm, errors }, dispatch] =
+  const [{ activeStudentProfile, activeStudentProfileForm, studentProfileForms, errors }, dispatch] =
     useStore(({ studentProfiles }) => studentProfiles);
 
   const fields = getDefaultInfoFormFields();
@@ -100,6 +105,30 @@ function StudentProfile() {
     } catch (err) {
       console.log(err);
     }
+  }
+  
+  async function handleDeleteStudentProfile(profile: StudentProfileType | StudentProfileForm) {
+    if (typeof profile.id === "number") {
+      const { token } = user as User;
+
+      try {
+        const deletedProfile = await deleteStudentProfile(profile.id, token);
+        if ("messages" in deletedProfile) {
+          dispatch(failDelete(deletedProfile));
+
+          return;
+        }
+
+        if ("id" in deletedProfile) {
+          dispatch(successDelete());
+        }
+      } catch (err) {
+        console.log(err);
+        return;
+      }
+    }
+
+    dispatch(deleteProfile(profile));
   }
 
   async function setDates(updatedProfile: StudentProfileType) {
@@ -199,6 +228,11 @@ function StudentProfile() {
         <br />
         <i>time: </i>
         <ScheduleDatesInfo />
+        {studentProfileForms.length > 1 && (
+          <button onClick={() => handleDeleteStudentProfile(profile)} style={{background: 'red', color: '#fff'}}>
+            delete profile
+          </button>
+        )}
         <hr />
       </>
     );

@@ -40,21 +40,14 @@ def update_student_profile(id, **kwargs):
     raise InvalidUsage.not_allowed_to_update()
 
 
-# todo: remove
-@blueprint.route('/api/student/profile/table', methods=('PUT',))
+@blueprint.route('/api/student/profile/<int:id>', methods=('DELETE',))
 @jwt_required()
-@use_kwargs(student_profile_schema)
 @marshal_with(student_profile_schema)
-def update_student_profile_table(id, update_table_data):
+def delete_student_profile(id):
     student_profile = StudentProfile.query.get(id)
 
     if student_profile and student_profile.student.user == current_user:
-        method = update_table_data['method']
-        value = update_table_data['value']
+        student_profile.delete()
+        return student_profile
 
-        if method == 'add':
-            return student_profile.add_to_table(value)
-        if method == 'delete':
-            return student_profile.delete_from_table(value)
-
-    raise Exception('You are not allowed to update this student profile')
+    raise InvalidUsage.not_allowed_to_delete()

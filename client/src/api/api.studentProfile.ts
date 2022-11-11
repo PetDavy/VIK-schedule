@@ -34,7 +34,7 @@ export async function updateStudentProfile(
   studentProfile: UpdateStudentProfile,
   accessToken: string
 ): Promise<StudentProfile | ResponseErrorType> {
-  const studentProfileResponse: Response = await fetch(
+  const studentProfileResponse = await fetch(
     `${API_ROOT}/api/student/profile`,
     {
       method: "PUT",
@@ -50,6 +50,27 @@ export async function updateStudentProfile(
     studentProfileResponse.status === 200 ||
     studentProfileResponse.status === 403 ||
     studentProfileResponse.status === 422
+  ) {
+    return studentProfileResponse.json();
+  }
+
+  throw new Error(studentProfileResponse.statusText);
+}
+
+export async function deleteStudentProfile(
+  id: number,
+  accessToken: string
+): Promise<StudentProfile | ResponseErrorType> {
+  const studentProfileResponse = await fetch(`${API_ROOT}/api/student/profile/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (
+    studentProfileResponse.status === 200 ||
+    studentProfileResponse.status === 403
   ) {
     return studentProfileResponse.json();
   }

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useStore } from "../../state/storeHooks";
 
-import { loadStudents, updateStudent } from "../../api/api.student";
+import { loadStudents, updateStudent, deleteStudent } from "../../api/api.student";
 
 import { FormField, createFormField } from "../../types/formField";
 import {
@@ -12,11 +12,14 @@ import {
   updateAge,
   successUpdate,
   failUpdate,
+  successDelete,
+  failDelete,
 } from "./Student.slice";
 import { setStudents } from "../../components/StudentsList/StudentsList.slice";
 
 import Form from "../../components/Form/Form";
 import StudentProfiles from "../../components/StudentProfiles/StudentProfiles";
+import { User } from "../../types/user";
 
 function Student() {
   const [{ user }] = useStore(({ app }) => app);
@@ -82,6 +85,29 @@ function Student() {
     }
   }
 
+  async function removeStudent() {
+    const { token } = user as User;
+
+    if (!student) {
+      return;
+    }
+
+    try {
+      const responceStudentData =  await deleteStudent(student.id, token);
+
+      if ("messages" in responceStudentData) {
+        dispatch(failDelete(responceStudentData));
+      }
+
+      if ("id" in responceStudentData) {
+        dispatch(successDelete());
+        location.href = "/students";
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
   return (
     <div className="Student" style={{maxWidth: '1400px', margin: '0 auto'}}>
       {isLoading && <div>Loading...</div>}
@@ -96,6 +122,12 @@ function Student() {
           <p>
             <i>Info:</i> {student.info}
           </p>
+          <button
+            onClick={removeStudent}
+            style={{ backgroundColor: "red", color: "white" }}
+          >
+            Delete Student
+          </button>
           <Form
             fields={fields}
             formObject={{ ...studentForm, age: String(studentForm.age) }}

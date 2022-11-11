@@ -28,6 +28,7 @@ class StudentSchema(Schema):
         strict = True
 
 
+# todo: remove or update
 class StudentUpdateSchema(StudentSchema):
     @validates_schema
     def validate_student(self, data, **kwargs):

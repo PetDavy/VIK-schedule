@@ -66,6 +66,15 @@ export const studentSlice = createSlice({
     failUpdate: (state, action: PayloadAction<ResponseErrorType>) => {
       state.errors = action.payload;
     },
+    successDelete: (state) => {
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
+    },
+    failDelete: (state, action: PayloadAction<ResponseErrorType>) => {
+      state.errors = action.payload;
+    }
   },
 });
 
@@ -76,6 +85,8 @@ export const {
   updateAge,
   successUpdate,
   failUpdate,
+  successDelete,
+  failDelete,
 } = studentSlice.actions;
 
 export default studentSlice.reducer;

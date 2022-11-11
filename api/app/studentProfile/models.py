@@ -7,7 +7,7 @@ class StudentProfile(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     student = db.relationship(
         'Student',
-        backref=db.backref('profiles', lazy='dynamic')
+        backref=db.backref('profiles', lazy='dynamic'),
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     class_price = db.Column(db.Integer)

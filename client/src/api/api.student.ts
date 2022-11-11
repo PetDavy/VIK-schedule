@@ -60,3 +60,24 @@ export async function updateStudent(
 
   throw new Error(studentResponse.statusText);
 }
+
+export async function deleteStudent(
+  id: number,
+  accessToken: string
+): Promise<Student | ResponseErrorType> {
+  const studentResponse = await fetch(`${API_ROOT}/api/student/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (
+    studentResponse.status === 200 ||
+    studentResponse.status === 403
+  ) {
+    return studentResponse.json();
+  }
+
+  throw new Error(studentResponse.statusText);
+}

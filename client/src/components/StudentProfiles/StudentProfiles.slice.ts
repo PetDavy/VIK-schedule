@@ -81,6 +81,17 @@ export const studentProfilesSlice = createSlice({
       state.activeStudentProfileForm = newProfile;
       state.activeStudentProfile = null;
     },
+    deleteProfile: (state, action: PayloadAction<StudentProfile | StudentProfileForm>) => {
+      state.studentProfiles = state.studentProfiles.filter(
+        (profile) => profile.id !== action.payload.id
+      );
+      state.studentProfileForms = state.studentProfileForms.filter(
+        (profile) => profile.id !== action.payload.id
+      );
+
+      state.activeStudentProfile = state.studentProfiles[0];
+      state.activeStudentProfileForm = state.studentProfileForms[0];
+    },
     removeNewProfile: (state, action: PayloadAction<string>) => {
       state.studentProfileForms = state.studentProfileForms.filter(
         (profile) => profile.id !== action.payload
@@ -151,6 +162,15 @@ export const studentProfilesSlice = createSlice({
     },
     failCreate: (state, action: PayloadAction<ResponseErrorType>) => {
       state.errors = action.payload;
+    },
+    successDelete: (state) => {
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
+    },
+    failDelete: (state, action: PayloadAction<ResponseErrorType>) => {
+      state.errors = action.payload;
     }
   },
 });
@@ -161,6 +181,7 @@ export const {
   setActiveStudentProfile,
   setActiveStudentProfileForm,
   startNewProfile,
+  deleteProfile,
   removeNewProfile,
   updateClassPrice,
   updateScheduleDates,
@@ -168,6 +189,8 @@ export const {
   failUpdate,
   successCreate,
   failCreate,
+  successDelete,
+  failDelete,
 } = studentProfilesSlice.actions;
 
 export default studentProfilesSlice.reducer;
