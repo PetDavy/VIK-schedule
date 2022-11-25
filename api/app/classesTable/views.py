@@ -5,6 +5,7 @@ from flask_apispec import use_kwargs, marshal_with
 from app.studentProfile.models import StudentProfile
 from .models import ClassTable
 from .serializers import ClassTableSchema
+from app.exeptions import InvalidUsage
 
 blueprint = Blueprint('classesTable', __name__)
 
@@ -22,7 +23,7 @@ def add_class(profile_id, **kwargs):
 
         return class_table
 
-    raise Exception('You are not allowed to add this class')
+    raise InvalidUsage.not_allowed_to_add()
 
 
 @blueprint.route('/api/classes/<int:class_table_id>', methods=('DELETE',))
@@ -40,7 +41,7 @@ def delete_class(class_table_id):
 
         return jsonify({'id': class_table_id, 'method': 'DELETE'})
 
-    raise Exception('You are not allowed to delete this class')
+    raise InvalidUsage.not_allowed_to_delete()
 
 
 @blueprint.route('/api/classes/<int:class_table_id>', methods=('PUT',))
@@ -60,4 +61,4 @@ def update_class(class_table_id, **kwargs):
 
         return class_table
 
-    raise Exception('You are not allowed to update this class')
+    raise InvalidUsage.not_allowed_to_update()
