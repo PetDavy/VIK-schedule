@@ -12,7 +12,11 @@ export async function registerUser(
     body: JSON.stringify(user),
   });
 
-  if (registerResponse.status === 201 || registerResponse.status === 422) {
+  if (
+    registerResponse.status === 201 ||
+    registerResponse.status === 422 ||
+    registerResponse.status === 400
+  ) {
     return registerResponse.json();
   }
 

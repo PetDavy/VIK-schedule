@@ -3,6 +3,7 @@ import { FormField as FormFieldType } from "../../types/formField";
 import { ResponseErrorType } from "../../api/api";
 
 import FormField from "../FormField/FormField";
+import Loader from "../Loader/Loader";
 
 interface FormProps extends PropsWithChildren {
   fields: FormFieldType[];
@@ -12,6 +13,7 @@ interface FormProps extends PropsWithChildren {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onChange: (name: string, value: string) => void;
   noButton?: boolean;
+  isLoading?: boolean;
 }
 
 const Form: FC<FormProps> = ({
@@ -23,6 +25,7 @@ const Form: FC<FormProps> = ({
   onChange,
   children,
   noButton,
+  isLoading,
 }) => {
   function handleUpdateField(
     name: string,
@@ -32,9 +35,9 @@ const Form: FC<FormProps> = ({
   }
 
   return (
-    <form className="Form" onSubmit={onSubmit}>
+    <form className="form" onSubmit={onSubmit}>
       {errors.messages.map((message) => (
-        <div className="error" key={message}>
+        <div className="form__error" key={message}>
           {message}
         </div>
       ))}
@@ -45,7 +48,7 @@ const Form: FC<FormProps> = ({
           name={filed.name}
           value={formObject[filed.name]}
           placeholder={filed.placeholder}
-          label={filed.name}
+          label={filed.label}
           type={filed.type}
           required={filed.required}
           disabled={filed.disabled}
@@ -54,7 +57,9 @@ const Form: FC<FormProps> = ({
       ))}
       {children}
       {!noButton && (
-        <button type="submit">{buttonText}</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? <Loader /> : buttonText}
+        </button>
       )}
     </form>
   );

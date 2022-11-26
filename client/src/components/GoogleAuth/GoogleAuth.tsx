@@ -7,6 +7,11 @@ import { startGoogleLoggingIn, endLoggingIn } from "../../pages/Login/Login.slic
 import { setStudents, startLoad as startStudentLoad } from "../StudentsList/StudentsList.slice";
 import { loadStudents } from "../../api/api.student";
 
+import GoogleIcon from '../../assets/icons/google.svg';
+import Loader from "../Loader/Loader";
+
+import '../../assets/styles/components/google-auth.scss';
+
 declare global {
   interface Window {
     handleGoogleLogin: (accessToken: string) => void;
@@ -61,9 +66,23 @@ function GoogleAuth() {
   }
   
   return (
-    <div>
-      <button style={{padding: '0'}} onClick={signIn} disabled={googleLoggingIn}>
-        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" />
+    <div className="google-auth">
+      <button
+        onClick={signIn}
+        disabled={googleLoggingIn}
+        className="google-auth__btn"
+      >
+        {
+          googleLoggingIn ? 
+          <Loader /> :
+          <img
+             src={GoogleIcon}
+             alt="Google auth button"
+             width="25"
+             className="google-auth__icon"
+           />
+        }
+        Auth in Google 
       </button>
     </div>
   )

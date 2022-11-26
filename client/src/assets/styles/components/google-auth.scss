@@ -1,0 +1,26 @@
+@import '../common/buttons';
+@import '../common/variables';
+
+.google-auth {
+  display: flex;
+  justify-content: center;
+
+  &__btn {
+    @include btn-inline(#fff);
+  
+    min-height: 46px;
+    min-width: $btn-login-width;
+    margin-bottom: 65px;
+    padding: 0 10px;
+    border-radius: 50px;
+    transition: background 0.3s;
+  }
+
+  &__icon {
+    margin-right: 8px;
+  }
+
+  .loader {
+    margin-right: 8px;
+  }
+}

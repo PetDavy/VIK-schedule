@@ -21,6 +21,8 @@ import { loadStudents } from "../../api/api.student";
 
 import { useStore } from "../../state/storeHooks";
 
+import '../../assets/styles/login.scss';
+
 function Login() {
   const [{ user, loggingIn, errors }, dispatch] = useStore(
     ({ login }) => login
@@ -38,6 +40,11 @@ function Login() {
 
   async function signIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (loggingIn) {
+      return;
+    }
+
     dispatch(startLoggingIn());
 
     try {
@@ -67,19 +74,23 @@ function Login() {
   }
 
   return (
-    <div className="Login">
-      Login
-      {loggingIn && <p>Logging in...</p>}
-      <Form
-        fields={fields}
-        formObject={user}
-        errors={errors}
-        buttonText="Login"
-        onChange={updateFileds}
-        onSubmit={signIn}
-      />
-      <GoogleAuth />
-      <Link to="/register">Sign up</Link>
+    <div className="login">
+      <div className="login__container">
+        <h1 className="login__title">
+          Log in
+        </h1>
+        <Form
+          fields={fields}
+          formObject={user}
+          errors={errors}
+          buttonText="Login"
+          onChange={updateFileds}
+          onSubmit={signIn}
+          isLoading={loggingIn}
+        />
+        <GoogleAuth />
+        <Link to="/register">Sign up</Link>
+      </div>
     </div>
   );
 }

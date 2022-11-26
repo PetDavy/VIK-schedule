@@ -1,9 +1,9 @@
 import { FC } from "react";
+import classNames from "classnames";
 import { FormField as FormFieldType } from "../../types/formField";
 
 interface FormFieldProps extends FormFieldType {
   value: string;
-  label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,7 +20,7 @@ const FormField: FC<FormFieldProps> = ({
 }) => {
   return (
     <div className="form-field">
-      <label htmlFor={name}>{label}</label>
+      {label && <label htmlFor={name}>{label}</label>}
       <input
         type={type}
         name={name}
@@ -29,8 +29,14 @@ const FormField: FC<FormFieldProps> = ({
         required={required}
         disabled={disabled}
         onChange={onChange}
-        style={{ borderColor: invalid ? "red" : "initial" }}
+        id={label}
+        // style={{ borderColor: invalid ? "red" : "initial" }}
+        className={classNames({
+          invalid,
+          active: value.length
+         })}
       />
+      <span className="form-control" data-type={name}></span>
     </div>
   );
 };
