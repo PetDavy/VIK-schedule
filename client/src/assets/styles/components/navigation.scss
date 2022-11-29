@@ -1,0 +1,42 @@
+@import '../common/variables';
+
+.navigation {
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 140px;
+    gap: $grid-dashboard-gap;
+  }
+
+  &__item-container {
+
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: $bg-color-primary;
+  }
+
+  &__item-icon {
+    margin-bottom: 10px;
+    height: 35px;
+  }
+
+  &__item-name {
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  &__item-count {
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+}

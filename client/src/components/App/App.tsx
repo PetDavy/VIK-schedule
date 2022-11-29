@@ -13,7 +13,7 @@ import Profile from "../../pages/Profile/Profile";
 import Students from "../../pages/Students/Students";
 import Student from "../../pages/Student/Student";
 
-import { loadUser, endLoad as endUserLoad } from "./App.slice";
+import { loadUser, endLoad as endUserLoad, closeMenu } from "./App.slice";
 import {
   setStudents,
   startLoad as startStudentLoad,
@@ -22,6 +22,7 @@ import {
 import { getUser } from "../../api/api.user";
 import { loadStudents } from "../../api/api.student";
 import { useStoreWithInit } from "../../state/storeHooks";
+import React from "react";
 
 function App() {
   const [{ loading, user }, dispatch] = useStoreWithInit(
@@ -53,8 +54,12 @@ function App() {
     dispatch(setStudents(await loadStudents(token)));
   }
 
+  function handleGlobalClick(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(closeMenu());
+  }
+
   return (
-    <div className="App">
+    <div className="App" onClick={handleGlobalClick}>
       <Router>
         {user && <Header />}
         {!loading && (

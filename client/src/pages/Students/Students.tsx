@@ -3,10 +3,10 @@ import StudentForm from "../../components/StudentForm/StudentForm"
 
 function Students() {
   return (
-    <div className="Students">
+    <main className="students">
       <StudentForm />
       <StudentsList />
-    </div>
+    </main>
   )
 }
 

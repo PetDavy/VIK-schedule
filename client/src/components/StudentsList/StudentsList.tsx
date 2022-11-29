@@ -1,4 +1,4 @@
-import { useStore, useStoreWithInit } from "../../state/storeHooks";
+import { useStore } from "../../state/storeHooks";
 import StudentListItem from "./StudentListItem";
 
 function StudentsList() {
@@ -6,7 +6,7 @@ function StudentsList() {
   const [{ user }] = useStore(({ app }) => app);
 
   return (
-    <div className="StudentsList">
+    <div className="students-list">
       {students.length === 0 && <div>There are no students yet</div>}
       <ul>
         {students.map((student) => (

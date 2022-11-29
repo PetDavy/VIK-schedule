@@ -16,6 +16,7 @@ import {
 } from "./Profile.slice";
 import { loadUser, endLoad } from "../../components/App/App.slice";
 import { updateUser, getUser } from "../../api/api.user";
+import { isSuccessResponse } from "../../api/api";
 
 import Form from "../../components/Form/Form";
 
@@ -70,12 +71,10 @@ function Profile() {
     try {
       const updatedUser = await updateUser(updatingFields, user.token);
 
-      if ("messages" in updatedUser) {
-        dispatch(failUpdate(updatedUser));
-      }
-
-      if ("token" in updatedUser) {
+      if (isSuccessResponse(updatedUser)) {
         dispatch(successUpdate());
+      } else {
+        dispatch(failUpdate(updatedUser));
       }
 
       dispatch(loadUser(await getUser(user.token)));

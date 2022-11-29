@@ -1,0 +1,8 @@
+@import 'common/variables';
+
+.dashboard {
+  padding: 40px 25px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $grid-dashboard-gap;
+}
