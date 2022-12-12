@@ -59,7 +59,7 @@ function ProfileButton() {
           <div className="profile-button__menu-title-email">{user?.email}</div>
         </div>
         <Link to="/profile" className="profile-button__menu-item">
-          Edit
+          Profile
         </Link>
         <div onClick={handleLogout} className="profile-button__menu-item">
           Log out

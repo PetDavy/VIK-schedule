@@ -9,6 +9,7 @@ import studentForm from "../components/StudentForm/StudentForm.slice";
 import student from "../pages/Student/Student.slice";
 import studentProfiles from "../components/StudentProfiles/StudentProfiles.slice";
 import scheduleDates from "../components/ScheduleDates/StudentDates.slice";
+import modal from "../components/Modal/Modal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     student,
     studentProfiles,
     scheduleDates,
+    modal,
   },
 });
 

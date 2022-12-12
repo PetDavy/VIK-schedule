@@ -6,10 +6,12 @@ import "../../assets/styles/dashboard.scss";
 function Dashboard() {
   return (
     <main className="dashboard">
-      <Navigation />
-      <div className="chart"></div>
-      <div className="lessons"></div>
-      <StudentsList />
+      <div className="dashboard__content">
+        <Navigation />
+        <div className="chart"></div>
+        <div className="lessons"></div>
+        <StudentsList />
+      </div>
     </main>
   )
 };

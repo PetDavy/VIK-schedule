@@ -1,0 +1,14 @@
+@mixin side-indent($size) {
+  $indent: 0;
+
+  @if $size == 'small' {
+    $indent: 40px;
+  } @else if $size == 'medium' {
+    $indent: 80px;
+  } @else if $size == 'large' {
+    $indent: 100px;
+  }
+
+  padding-left: $indent;
+  padding-right: $indent;
+}

@@ -1,0 +1,9 @@
+@mixin avatar {
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    background-color: $bg-color-primary;
+    color: #fff;
+}

@@ -5,7 +5,8 @@ $bg-color-primary: #8080fd;
 
 // colors
 $color-primary: #8080fd;
-$font-color: #495057;
+$font-color: #33303CDE;
+$font-color-gray: #495057;
 $color-error: #ff0000;
 
 // sizes
@@ -14,3 +15,6 @@ $header-height: 70px;
 
 // gaps
 $grid-dashboard-gap: 30px;
+
+// durations
+$show-up-duration: 0.2s;

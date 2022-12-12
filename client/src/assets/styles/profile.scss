@@ -1,0 +1,242 @@
+@import 'common.scss';
+@import 'common/variables';
+@import 'common/buttons';
+@import 'common/avatar';
+@import "common/sizes";
+
+.profile {
+  @include side-indent('large');
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: $grid-dashboard-gap;
+    padding: 40px 0;
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 5px;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 5px;
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid #f3f3f3;
+  }
+
+  &__avatar {
+    @include avatar;
+
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+    font-size: 24px;
+  }
+
+  &__name {
+    margin-bottom: 30px;
+    font-size: 20px;
+    letter-spacing: 0.6px;
+    color: $font-color;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  &__info-item {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+  }
+
+  &__info-item-icon {
+    margin-right: 15px;
+    padding: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    background-color: #efedfd;
+  }
+
+  &__info-item-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__info-item-amount {
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  &__info-item-text {
+    font-size: 12px;
+    color: $font-color-gray;
+    opacity: 0.9;
+    letter-spacing: 1px;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+  }
+
+  &__details-title {
+    margin-bottom: 15px;
+    font-size: 14px;
+    letter-spacing: 0.6px;
+    color: $font-color-gray;
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  &__details-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  &__details-label {
+    margin-right: 5px;
+    color: $font-color;
+    font-weight: 600;
+  }
+
+  &__details-text {
+    color: $font-color-gray;
+    opacity: 0.9;
+    font-size: 14px;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  &__btn {
+    @include btn-inline($bg-color-primary);
+    @include btn-dark;
+    
+    margin: 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  // Modal
+
+  .modal {
+    .form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 280px;
+      margin: 0 auto;
+
+      button {
+        @include btn-inline($bg-color-primary);
+        @include btn-dark;
+
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+
+    .form-field {
+      position: relative;
+      width: 100%;
+      margin-bottom: 22px;
+    }
+
+    .form__error {
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: $color-error;
+    }
+
+    input {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 40px;
+      border: 1px solid #e5e5e5;
+      color: $font-color;
+      font-size: 15px;
+      letter-spacing: 0.6px;
+      border-radius: 5px;
+      padding: 8px 15px;
+      transition: border-color 0.3s ease;
+      z-index: 2;
+
+      &:focus {
+        outline: none;
+        border-color: $bg-color-primary;
+        border-width: 2px;
+
+        & + .form-control {
+          color: $bg-color-primary;
+        }
+      }
+
+      &:placeholder-shown {
+        background-color: transparent;
+      }
+      
+      &:placeholder-shown + .form-control {
+        transform: translate(14px, 11px);
+        font-size: 15px;
+        color:rgba(0, 0, 0, 0.4);
+        background-color: transparent;
+        z-index: 1;
+      }
+      
+      &::placeholder {
+        color: transparent;
+      }
+
+      &.invalid {
+        border-color: $color-error;
+        border-width: 2px;
+      }
+
+    }
+
+    .form-control {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 0 4px;
+      background-color: #fff;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      color:rgba(0, 0, 0, 0.4);
+      transform: translate(12px, -5px);
+      transition: transform 0.3s ease, font-size 0.3s ease;
+      z-index: 2;
+
+      &::before {
+        content: attr(data-type);
+        display: inline-block;
+      }
+    }
+  }
+}

@@ -1,8 +1,13 @@
 @import 'common/variables';
+@import 'common/sizes';
 
 .dashboard {
-  padding: 40px 25px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $grid-dashboard-gap;
+  @include side-indent('large');
+
+  &__content {
+    padding: 40px 25px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $grid-dashboard-gap;
+  }
 }

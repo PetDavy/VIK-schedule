@@ -2,7 +2,7 @@ import { useStore } from "../../state/storeHooks";
 import StudentListItem from "./StudentListItem";
 
 function StudentsList() {
-  const [{ students }, dispatch] = useStore(({ studentsList }) => studentsList);
+  const [{ students }] = useStore(({ studentsList }) => studentsList);
   const [{ user }] = useStore(({ app }) => app);
 
   return (

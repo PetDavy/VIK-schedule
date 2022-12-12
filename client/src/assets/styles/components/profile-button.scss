@@ -1,19 +1,15 @@
 @import '../common/variables';
+@import '../common/avatar';
 
 .profile-button {
   position: relative;
   cursor: pointer;
 
   &__avatar {
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+    @include avatar; 
+    
     width: 36px;
     height: 36px;
-    font-weight: 600;
-    background-color: $bg-color-primary;
-    color: #fff;
   }
 
   &__menu {
