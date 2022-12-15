@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { useStore, useStoreWithInit } from "../../state/storeHooks";
 import { getImgTextFromName } from "../../utils/user";
 import { FormField, createFormField } from "../../types/formField";
+import classNames from "classnames";
 
 import {
   initSetup,
@@ -12,27 +14,33 @@ import {
   failUpdate,
   successUpdate,
   updatePassword,
-  updateNewPassword
+  updateNewPassword,
+  updateActiveTab,
 } from "./Profile.slice";
 import { loadUser, endLoad } from "../../components/App/App.slice";
 import { openModal } from "../../components/Modal/Modal.slice";
 import { updateUser, getUser } from "../../api/api.user";
-import { isSuccessResponse } from "../../api/api";
+import { isSuccessResponse, filterFieldErrors } from "../../api/api";
+import { tabType } from "../../types/profile";
 
 import Form from "../../components/Form/Form";
 import Modal from "../../components/Modal/Modal";
 import studentProfileIcon from "../../assets/icons/student-profile.svg";
 import checkIcon from "../../assets/icons/check.svg";
+import formText from '../../assets/texts/form.json';
 
 import '../../assets/styles/profile.scss';
 
 function Profile() {
   const [{ user }] = useStore(({ app }) => app);
   const [{ students }] = useStore(({ studentsList }) => studentsList);
-  const [{ profile, errors }, dispatch] = useStoreWithInit(({ profile }) => profile, setInitFieldsValues);
+  const [{ profile, errors, activeTab }, dispatch] = useStoreWithInit(({ profile }) => profile, setInitFieldsValues);
 
   const infoFields = getDefaultInfoFormFields();
   const passwordFields = getDefaultPasswordFormFields();
+  const tabs = useMemo<tabType[]>(() => ['overview', 'security'], []);
+  const infoErrors = useMemo(() => filterFieldErrors(errors, infoFields.map(field => field.name)), [errors]);
+  const passwordErrors = useMemo(() => filterFieldErrors(errors, passwordFields.map(field => field.name)), [errors]);
 
   function setInitFieldsValues() {
     if (user) {
@@ -104,13 +112,11 @@ function Profile() {
 
     try {
       const updatedUser = await updateUser({ password: profile.password, new_password: profile.new_password }, user.token);
-
-      if ("messages" in updatedUser) {
-        dispatch(failUpdate(updatedUser));
-      }
-
-      if ("token" in updatedUser) {
+      
+      if (isSuccessResponse(updatedUser)) {
         dispatch(successUpdate());
+      } else {
+        dispatch(failUpdate(updatedUser));
       }
 
       dispatch(loadUser(await getUser(user.token)));
@@ -192,18 +198,10 @@ function Profile() {
                   <Form
                     fields={infoFields}
                     formObject={profile}
-                    errors={errors}
+                    errors={infoErrors}
                     buttonText="Update"
                     onChange={updateInfoFields}
                     onSubmit={updateProfileInfo}
-                  />
-                  <Form
-                    fields={passwordFields}
-                    formObject={profile}
-                    errors={errors}
-                    buttonText="Update"
-                    onChange={updatePasswordFields}
-                    onSubmit={updateProfilePassword}
                   />
                 </>
               )}
@@ -211,10 +209,41 @@ function Profile() {
           </div>
 
         </div>
-        <div className="profile__right">
-          <div className="profile__activity">
-            <h3>Activity</h3>
+        <div className="profile__center">
+          <div className="profile__tabs">
+            {tabs.map((tab) => (
+              <div
+                key={tab}
+                className={classNames('profile__tab', {
+                  active: tab === activeTab,
+                })}
+                onClick={() => dispatch(updateActiveTab(tab))}
+              >
+                {tab}
+              </div>
+            ))}
           </div>
+          {activeTab === 'overview' && (
+            <div className="profile__activity activity">
+              <h3>Activity</h3>
+            </div>
+          )}
+          {activeTab === 'security' && user && !user.is_google_auth && (
+            <div className="profile__security">
+              <h3 className="profile__security-title">Change Password</h3> 
+              <div className="profile__security-info">
+                {formText.usePassword}
+              </div>
+              <Form
+                fields={passwordFields}
+                formObject={profile}
+                errors={passwordErrors}
+                buttonText="Change Password"
+                onChange={updatePasswordFields}
+                onSubmit={updateProfilePassword}
+              />
+            </div>
+          )}
         </div>
 
       </div>
@@ -246,12 +275,14 @@ function getDefaultPasswordFormFields(): FormField[] {
     createFormField({
       name: "password",
       type: "password",
-      placeholder: "Old password",
+      placeholder: "Old Password",
+      controlText: "Old Password",
     }),
     createFormField({
       name: "new_password",
       type: "password",
-      placeholder: "New password",
+      placeholder: "New Password",
+      controlText: "New Password",
     }),
   ];
 }

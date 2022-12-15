@@ -2,7 +2,8 @@
 @import 'common/variables';
 @import 'common/buttons';
 @import 'common/avatar';
-@import "common/sizes";
+@import 'common/sizes';
+@import 'common/form';
 
 .profile {
   @include side-indent('large');
@@ -21,12 +22,9 @@
     border-radius: 5px;
   }
 
-  &__right {
+  &__center {
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    border-radius: 5px;
   }
 
   &__head {
@@ -141,10 +139,126 @@
     letter-spacing: 1px;
   }
 
+  &__tabs {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__tab {
+    display: inline-flex;
+    height: 40px;
+    align-items: center;
+    margin-right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    letter-spacing: 0.6px;
+    color: $font-color-gray;
+    opacity: 0.9;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #f3f3f3;
+    }
+
+    &.active {
+      color: #fff;
+      opacity: 1;
+      background-color: $bg-color-primary;
+    }
+  }
+
+  &__activity {
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 5px;
+  }
+
+  &__security {
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 5px;
+
+    .form {
+      @include default-form;
+
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+
+      .form-field {
+        width: calc(50% - 10px);
+      }
+
+      .form__error {
+        width: 100%;
+        padding: 20px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #fdecec;
+        color: $color-error;
+        font-size: 15px;
+        letter-spacing: 0.6px;
+      }
+
+      input {
+        padding-right: 40px;
+      }
+
+      .form-field-toggler {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        height: 24px;
+        width: 24px;
+        transform: translateY(-50%);
+        background-image: url('../icons/eye.svg');
+        opacity: 0.4;
+        cursor: pointer;
+        z-index: 3;
+
+        &.visible {
+          background-image: url('../icons/eye-cross.svg')
+        }
+      }
+    }
+
+    button {
+      @include btn-inline($bg-color-primary);
+      @include btn-dark;
+
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  &__security-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.6px;
+    color: $font-color;
+  }
+
+  &__security-info {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 15px;
+    letter-spacing: 0.6px;
+    color: #ff9f43;
+    background-color: #fef4e9;
+  }
+
   // Modal
 
   .modal {
     .form {
+      @include default-form;
+
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -155,87 +269,14 @@
         @include btn-inline($bg-color-primary);
         @include btn-dark;
 
-        margin-bottom: 10px;
         text-transform: uppercase;
         letter-spacing: 1px;
       }
-    }
 
-    .form-field {
-      position: relative;
-      width: 100%;
-      margin-bottom: 22px;
-    }
-
-    .form__error {
-      margin-bottom: 10px;
-      font-size: 12px;
-      color: $color-error;
-    }
-
-    input {
-      position: relative;
-      display: block;
-      width: 100%;
-      height: 40px;
-      border: 1px solid #e5e5e5;
-      color: $font-color;
-      font-size: 15px;
-      letter-spacing: 0.6px;
-      border-radius: 5px;
-      padding: 8px 15px;
-      transition: border-color 0.3s ease;
-      z-index: 2;
-
-      &:focus {
-        outline: none;
-        border-color: $bg-color-primary;
-        border-width: 2px;
-
-        & + .form-control {
-          color: $bg-color-primary;
-        }
-      }
-
-      &:placeholder-shown {
-        background-color: transparent;
-      }
-      
-      &:placeholder-shown + .form-control {
-        transform: translate(14px, 11px);
-        font-size: 15px;
-        color:rgba(0, 0, 0, 0.4);
-        background-color: transparent;
-        z-index: 1;
-      }
-      
-      &::placeholder {
-        color: transparent;
-      }
-
-      &.invalid {
-        border-color: $color-error;
-        border-width: 2px;
-      }
-
-    }
-
-    .form-control {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: 0 4px;
-      background-color: #fff;
-      font-size: 10px;
-      letter-spacing: 0.6px;
-      color:rgba(0, 0, 0, 0.4);
-      transform: translate(12px, -5px);
-      transition: transform 0.3s ease, font-size 0.3s ease;
-      z-index: 2;
-
-      &::before {
-        content: attr(data-type);
-        display: inline-block;
+      .form__error {
+        margin-bottom: 10px;
+        font-size: 12px;
+        color: $color-error;
       }
     }
   }

@@ -3,6 +3,7 @@ import { FormField as FormFieldType } from "../../types/formField";
 import { ResponseErrorType } from "../../api/api";
 
 import FormField from "../FormField/FormField";
+import Loader from "../Loader/Loader";
 
 interface FormProps {
   fields: FormFieldType[];
@@ -12,6 +13,7 @@ interface FormProps {
   onSubmit: (e: FormEvent<HTMLButtonElement>) => void;
   onChange: (name: string, value: string) => void;
   noButton?: boolean;
+  isLoading?: boolean;
 }
 
 const FormBlock: FC<FormProps> = ({
@@ -22,6 +24,7 @@ const FormBlock: FC<FormProps> = ({
   onSubmit,
   onChange,
   noButton,
+  isLoading,
 }) => {
   function handleUpdateField(
     name: string,
@@ -49,10 +52,13 @@ const FormBlock: FC<FormProps> = ({
           required={filed.required}
           disabled={filed.disabled}
           invalid={!!errors.fields?.includes(filed.name)}
+          controlText={filed.controlText}
         />
       ))}
       {!noButton && (
-        <button onClick={onSubmit}>{buttonText}</button>
+        <button onClick={onSubmit} disabled={isLoading}>
+          {isLoading ? <Loader /> : buttonText}
+        </button>
       )}
     </div>
   );

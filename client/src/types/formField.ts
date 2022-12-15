@@ -6,6 +6,7 @@ export interface FormField {
   disabled: boolean;
   invalid: boolean;
   label: string | undefined;
+  controlText: string | undefined;
 }
 
 export function createFormField(data: Partial<FormField> & {name: string}): FormField {
@@ -16,6 +17,7 @@ export function createFormField(data: Partial<FormField> & {name: string}): Form
     disabled: false,
     invalid: false,
     label: undefined,
+    controlText: undefined,
     ...data
   }
 }

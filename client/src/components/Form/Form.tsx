@@ -53,6 +53,7 @@ const Form: FC<FormProps> = ({
           required={filed.required}
           disabled={filed.disabled}
           invalid={!!errors.fields?.includes(filed.name)}
+          controlText={filed.controlText}
         />
       ))}
       {children}
