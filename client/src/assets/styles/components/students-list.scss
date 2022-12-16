@@ -1,0 +1,58 @@
+@import '../common/variables';
+
+.students-list {
+  padding: 30px 20px;
+  box-shadow: $block-shadow;
+  border-radius: 6px;
+  min-height: 400px;
+
+  &__header {
+    display: grid;
+    grid-template-columns: 4fr 2fr 2fr 2fr;
+    margin-bottom: 20px;
+    padding: 0 10px 20px;
+    border-bottom: 1px solid $color-gray;
+  }
+
+  &__header-item {
+    justify-self: center;
+    color: $font-color-gray;
+    opacity: 0.8;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+
+    &:first-child {
+      justify-self: self-start;
+    }
+  }
+}
+
+.studentListItem {
+  display: grid;
+  grid-template-columns: 4fr 2fr 2fr 2fr;
+  padding: 20px 10px;
+  transition: background-color 0.2s ease-in-out;
+
+  &__element {
+    justify-self: center;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: $font-color;
+    
+    &:first-child {
+      justify-self: self-start;
+    }
+    
+    &--name {
+      font-weight: 600;
+    }
+
+    &--contact {
+      font-size: 11px;
+    }
+  }
+
+  &:hover {
+    background-color: #f8f8f8f8;
+  }
+}

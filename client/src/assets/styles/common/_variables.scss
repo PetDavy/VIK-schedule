@@ -8,6 +8,7 @@ $color-primary: #8080fd;
 $font-color: #33303CDE;
 $font-color-gray: #495057;
 $color-error: #ff0000;
+$color-gray: #d3cdcd;
 
 // sizes
 $btn-login-width: 150px;
@@ -18,3 +19,6 @@ $grid-dashboard-gap: 30px;
 
 // durations
 $show-up-duration: 0.2s;
+
+// shadows
+$block-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.06), 0 1px 4px rgb(0, 0, 0, 0.08);

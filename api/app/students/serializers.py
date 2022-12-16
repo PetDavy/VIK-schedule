@@ -13,6 +13,7 @@ class StudentSchema(Schema):
     name = fields.Str()
     age = fields.Int()
     info = fields.Str()
+    contact = fields.Str()
     created_at = fields.DateTime(dump_only=True)
     profiles = fields.List(fields.Nested(StudentProfileSchema))
 

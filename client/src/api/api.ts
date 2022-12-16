@@ -6,7 +6,7 @@ export interface ResponseErrorType {
 }
 
 export function isSuccessResponse<Type extends Object>(response: Type | ResponseErrorType): response is Type {
-  return "token" in response;
+  return "token" in response || "id" in response;
 }
 
 export function filterFieldErrors(errorObj: ResponseErrorType, fields: string[]): ResponseErrorType {

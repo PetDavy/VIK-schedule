@@ -7,6 +7,7 @@ export interface StudentState {
   studentForm: {
     name: string;
     info: string;
+    contact: string;
     age: number;
   };
   errors: ResponseErrorType;
@@ -17,6 +18,7 @@ const initialState: StudentState = {
   studentForm: {
     name: "",
     info: "",
+    contact: "",
     age: 0,
   },
   errors: {
@@ -33,6 +35,7 @@ export const studentSlice = createSlice({
       state.student = action.payload;
       state.studentForm.name = action.payload.name;
       state.studentForm.info = action.payload.info;
+      state.studentForm.contact = action.payload.contact;
       state.studentForm.age = action.payload.age;
     },
     updateName: (state, action: PayloadAction<string>) => {
@@ -55,7 +58,13 @@ export const studentSlice = createSlice({
         messages: [],
         fields: [],
       }
-
+    },
+    updateContact: (state, action: PayloadAction<string>) => {
+      state.studentForm.contact = action.payload;
+      state.errors = {
+        messages: [],
+        fields: [],
+      }
     },
     successUpdate: (state) => {
       state.errors = {
@@ -83,6 +92,7 @@ export const {
   updateName,
   updateInfo,
   updateAge,
+  updateContact,
   successUpdate,
   failUpdate,
   successDelete,

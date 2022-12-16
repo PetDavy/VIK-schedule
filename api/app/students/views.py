@@ -14,8 +14,14 @@ blueprint = Blueprint('students', __name__)
 @jwt_required()
 @use_kwargs(student_schema)
 @marshal_with(student_schema)
-def create_student(name, age, info, **kwargs):
-    student = Student(name=name, age=age, info=info, user=current_user)
+def create_student(name, age, info, contact, **kwargs):
+    student = Student(
+        name=name,
+        age=age,
+        info=info,
+        contact=contact,
+        user=current_user
+    )
     student_profile = StudentProfile(student=student)
     student.save()
     student_profile.save()

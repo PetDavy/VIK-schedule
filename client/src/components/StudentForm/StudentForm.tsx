@@ -1,7 +1,9 @@
+import { useStore } from "../../state/storeHooks";
+
 import Form from "../Form/Form";
 import { FormField, createFormField } from "../../types/formField";
+import { User } from "../../types/user";
 
-import { useStore } from "../../state/storeHooks";
 import {
   startCreating,
   successCreate,
@@ -11,10 +13,12 @@ import {
   updateInfo,
   endCreating,
   addNewStudent,
+  updateContact,
 } from "./StudentForm.slice";
 import { setStudents } from "../StudentsList/StudentsList.slice";
 
 import { createStudent, loadStudents } from "../../api/api.student";
+import { isSuccessResponse } from "../../api/api";
 
 function StudentForm() {
   const [{ user }] = useStore(({ app }) => app);
@@ -29,30 +33,28 @@ function StudentForm() {
       dispatch(updateAge(Number(value)));
     } else if (name === "info") {
       dispatch(updateInfo(value));
+    } else if (name === "contact") {
+      dispatch(updateContact(value));
     }
   }
 
   async function addStudent(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    if (!user) {
-      return;
-    }
+    const { token } = user as User;
 
     dispatch(startCreating());
 
     try {
-      const newStudentData = await createStudent(student, user.token);
+      const newStudentData = await createStudent(student, token);
 
-      if ('messages' in newStudentData) {
+      if (isSuccessResponse(newStudentData)) {
+        dispatch(successCreate());
+        dispatch(addNewStudent(newStudentData));
+        dispatch(setStudents(await loadStudents(token)));
+      } else {
         dispatch(failCreate(newStudentData));
       }
 
-      if ('id' in newStudentData) {
-        dispatch(successCreate());
-        dispatch(addNewStudent(newStudentData));
-        dispatch(setStudents(await loadStudents(user.token)));
-      }
     } catch (error) {
       console.warn(error);
     } finally {
@@ -95,6 +97,10 @@ function getDefaultFormFields(): FormField[] {
     createFormField({
       name: "info",
       placeholder: "Info",
+    }),
+    createFormField({
+      name: "contact",
+      placeholder: "Contact",
     }),
   ];
 }

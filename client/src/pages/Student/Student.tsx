@@ -9,6 +9,7 @@ import {
   setStudent,
   updateName,
   updateInfo,
+  updateContact,
   updateAge,
   successUpdate,
   failUpdate,
@@ -42,7 +43,6 @@ function Student() {
   }, [id, students, isLoading]);
 
   const [{ student, studentForm, errors }] = useStore(({ student }) => student);
-
   const fields = getDefaultStudentFormFields();
 
   function updateStudentInfoFileds(name: string, value: string) {
@@ -52,6 +52,8 @@ function Student() {
       dispatch(updateAge(Number(value)));
     } else if (name === "info") {
       dispatch(updateInfo(value));
+    } else if (name === "contact") {
+      dispatch(updateContact(value));
     }
   }
 
@@ -122,6 +124,9 @@ function Student() {
           <p>
             <i>Info:</i> {student.info}
           </p>
+          <p>
+            <i>Contact:</i> {student.contact}
+          </p>
           <button
             onClick={removeStudent}
             style={{ backgroundColor: "red", color: "white" }}
@@ -157,6 +162,10 @@ function getDefaultStudentFormFields(): FormField[] {
     createFormField({
       name: "info",
       placeholder: "Info",
+    }),
+    createFormField({
+      name: "contact",
+      placeholder: "Contact",
     }),
   ];
 }

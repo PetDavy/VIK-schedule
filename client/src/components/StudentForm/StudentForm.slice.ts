@@ -7,6 +7,7 @@ interface StudentFormState {
     name: string;
     age: number;
     info: string;
+    contact: string;
   };
   creating: boolean;
   errors: ResponseErrorType;
@@ -18,6 +19,7 @@ const initialState: StudentFormState = {
     name: "",
     age: 2,
     info: "",
+    contact: "",
   },
   creating: false,
   errors: {
@@ -43,6 +45,7 @@ export const studentsSlice = createSlice({
         name: "",
         age: 2,
         info: "",
+        contact: "",
       };
       state.errors = {
         messages: [],
@@ -80,6 +83,13 @@ export const studentsSlice = createSlice({
         fields: [],
       };
     },
+    updateContact: (state: StudentFormState, action: PayloadAction<string>) => {
+      state.student.contact = action.payload;
+      state.errors = {
+        messages: [],
+        fields: [],
+      };
+    },
     addNewStudent: (
       state: StudentFormState,
       action: PayloadAction<Student>
@@ -105,6 +115,7 @@ export const {
   updateName,
   updateAge,
   updateInfo,
+  updateContact,
   addNewStudent,
   removeNewStudent,
 } = studentsSlice.actions;

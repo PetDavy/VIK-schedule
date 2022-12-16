@@ -9,10 +9,19 @@ interface StudentListItemProps {
 
 const StudentListItem: FC<StudentListItemProps> = ({ student }) => {
   return (
-    <Link to={`/students/${student.id}`} className="StudentListItem" style={{display: "flex"}}>
-      name: {student.name}&nbsp;
-      age: {student.age}&nbsp;
-      info: {student.info}
+    <Link to={`/students/${student.id}`} className="studentListItem">
+      <div className="studentListItem__element studentListItem__element--name">
+        {student.name}
+      </div>
+      <div className="studentListItem__element studentListItem__element--age">
+        {student.age}
+      </div>
+      <div className="studentListItem__element studentListItem__element--created">
+        ----
+      </div>
+      <div className="studentListItem__element studentListItem__element--contact">
+        {student.contact}
+      </div>
     </Link>
   );
 }

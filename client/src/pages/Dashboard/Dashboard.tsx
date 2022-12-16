@@ -9,8 +9,8 @@ function Dashboard() {
       <div className="dashboard__content">
         <Navigation />
         <div className="chart"></div>
-        <div className="lessons"></div>
         <StudentsList />
+        <div className="lessons"></div>
       </div>
     </main>
   )
