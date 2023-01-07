@@ -18,9 +18,9 @@ def _login_user(client):
 
 def get_students_data():
     return [
-        {'name': 'Student 1', 'age': 10, 'info': 'Info 1'},
-        {'name': 'Student 2', 'age': 11, 'info': 'Info 2'},
-        {'name': 'Student 3', 'age': 12, 'info': 'Info 3'},
+        {'name': 'Student 1', 'age': 10, 'info': 'Info 1', 'contact': 'student1@gmail.com'}, # noqa
+        {'name': 'Student 2', 'age': 11, 'info': 'Info 2', 'contact': 'student2@gmail.com'}, # noqa
+        {'name': 'Student 3', 'age': 12, 'info': 'Info 3', 'contact': 'student3@gmail.com'}, # noqa
     ]
 
 
@@ -40,6 +40,7 @@ class TestStudents:
             assert response.json['name'] == student_data['name']
             assert response.json['age'] == student_data['age']
             assert response.json['info'] == student_data['info']
+            assert response.json['contact'] == student_data['contact']
 
     def test_get_students(self, client):
         user = _login_user(client)
@@ -56,6 +57,7 @@ class TestStudents:
             assert student_data['name'] == response.json[i]['name']
             assert student_data['age'] == response.json[i]['age']
             assert student_data['info'] == response.json[i]['info']
+            assert student_data['contact'] == response.json[i]['contact']
 
             assert len(response.json[i]['profiles']) == 1
             assert response.json[i]['profiles'][0]['student_id'] == i + 1 # noqa

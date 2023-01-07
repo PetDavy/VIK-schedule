@@ -13,9 +13,6 @@ import { ScheduleDate, dayType } from "../../types/scheduleDate";
 import FormBlock from "../Form/FormBlock";
 
 function ScheduleDatesPicker() {
-  const [{ activeStudentProfileForm }] = useStore(
-    ({ studentProfiles }) => studentProfiles
-  );
   const [{ days, openedDay, errors }, dispatch] = useStore(
     ({ scheduleDates }) => scheduleDates
   );
@@ -24,11 +21,13 @@ function ScheduleDatesPicker() {
 
   function handleDayClick(day: dayType) {
     if (openedDay && openedDay.day === day) {
+      // toggle off
       dispatch(setOpenedDay(null));
       return;
     }
 
     if (day in days && days[day]) {
+      // toggle on already saved day
       dispatch(setOpenedDay(days[day]));
     } else {
       dispatch(

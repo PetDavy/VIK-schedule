@@ -14,7 +14,7 @@ function Navigation() {
       <ul className="navigation__list">
         <li className="navigation__item-container">
           <Link to="/students" className="navigation__item">
-            <img src={StudentsIcon} alt="students" className="navigation__item-icon"  height="35" />
+            <img src={StudentsIcon} alt="students" className="navigation__item-icon"  height="60" />
             <span className="navigation__item-name">
               + Student 
             </span>
