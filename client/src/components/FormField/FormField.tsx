@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import classNames from "classnames";
 import { FormField as FormFieldType } from "../../types/formField";
 
 interface FormFieldProps extends FormFieldType {
   value: string;
-  label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -17,20 +17,40 @@ const FormField: FC<FormFieldProps> = ({
   disabled,
   invalid,
   onChange,
+  controlText,
 }) => {
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+
   return (
     <div className="form-field">
-      <label htmlFor={name}>{label}</label>
+      {label && <label htmlFor={name}>{label}</label>}
       <input
-        type={type}
+        type={isVisiblePassword? 'text' : type}
         name={name}
         value={value}
         placeholder={placeholder}
         required={required}
         disabled={disabled}
         onChange={onChange}
-        style={{ borderColor: invalid ? "red" : "initial" }}
+        id={label}
+        // style={{ borderColor: invalid ? "red" : "initial" }}
+        className={classNames({
+          invalid,
+          active: value.length
+         })}
       />
+      <span className="form-control" data-type={controlText || name}></span>
+      {type === "password" && (
+        <i
+          // className="form-field-toggler"
+          className={classNames('form-field-toggler', {
+            visible: isVisiblePassword
+          })}
+          onClick={() => setIsVisiblePassword(!isVisiblePassword)}
+        >
+
+        </i>
+      )}
     </div>
   );
 };

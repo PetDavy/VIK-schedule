@@ -5,6 +5,22 @@ export interface Student {
   name: string;
   info: string;
   age: number;
+  contact: string;
   created_at: string;
   profiles: StudentProfile[];
+}
+
+export interface CreateStudent {
+  name: string;
+  age?: number;
+  info?: string;
+  contact?: string;
+}
+
+export interface UpdateStudent {
+  id: number;
+  name?: string;
+  age?: number;
+  info?: string;
+  contact?: string;
 }

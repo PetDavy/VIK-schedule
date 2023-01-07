@@ -18,6 +18,8 @@ import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 import { registerUser } from "../../api/api.user";
 import { loadUser } from "../../components/App/App.slice";
 
+import '../../assets/styles/login.scss';
+
 function Register() {
   const [{user, registering, errors}, dispatch] = useStore(({register}) => register);
 
@@ -35,6 +37,11 @@ function Register() {
 
   async function register(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    
+    if (registering) {
+      return;
+    }
+
     dispatch(startRegistering());
     
     try {
@@ -58,19 +65,23 @@ function Register() {
   }
 
   return (
-    <div className="Register">
-      Sign Up
-      {registering && <p>Signing up...</p>}
-      <Form 
-        fields={fields}
-        formObject={user}
-        errors={errors}
-        buttonText="Sign up"
-        onChange={updateFileds}
-        onSubmit={register} 
-      />
-      <GoogleAuth />
-      <Link to="/login">Log in</Link>
+    <div className="login">
+      <div className="login__container">
+        <h1 className="login__title">
+          Sign Up
+        </h1>
+        <Form 
+          fields={fields}
+          formObject={user}
+          errors={errors}
+          buttonText="Sign up"
+          onChange={updateFileds}
+          onSubmit={register} 
+          isLoading={registering}
+        />
+        <GoogleAuth />
+        <Link to="/login">Log in</Link>
+      </div>
     </div>
   );
 }

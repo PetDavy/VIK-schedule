@@ -47,7 +47,6 @@ export const registerSlice = createSlice({
       };
     }),
     failRegister: ((state: RegisterState, action: PayloadAction<ResponseErrorType>) => {
-      state.registering = false;
       state.errors = action.payload;
     }),
     updateUsername: ((state: RegisterState, action: PayloadAction<string>) => {

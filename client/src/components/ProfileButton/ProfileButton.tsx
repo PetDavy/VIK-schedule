@@ -2,35 +2,46 @@ import { Link } from "react-router-dom";
 
 import { useStore } from "../../state/storeHooks";
 import { getImgTextFromName } from "../../utils/user";
-import { logout } from "../App/App.slice";
+import { logout, openMenu, closeMenu } from "../App/App.slice";
+import { setStudents } from "../StudentsList/StudentsList.slice";
+import classNames from "classnames";
+
+import "../../assets/styles/components/profile-button.scss";
 
 function ProfileButton() {
-  const [{ user }, dispatch] = useStore(({ app }) => app);
+  const [{ user, isMenuOpen }, dispatch] = useStore(({ app }) => app);
+  const [{ students }] = useStore(({ studentsList }) => studentsList);
 
   function handleLogout() {
     localStorage.removeItem("token");
     dispatch(logout());
+    dispatch(setStudents([]));
+  }
+
+  function handleToggleMenu(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
+    
+    if (isMenuOpen) {
+      dispatch(closeMenu());
+    } else {
+      dispatch(openMenu());
+    }
   }
 
   function getAvatar(): JSX.Element | undefined {
     if (user && user.picture) {
-      return <img src={user.picture} alt={user.username} width="100" height="125" />;
+      return <img
+        src={user.picture}
+        alt={user.username}
+        width="36"
+        height="36"
+        className="profile-button__avatar"
+      />;
     }
 
     if (user && !user.picture) {
       return (
-        <span
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "50%",
-            background: "purple",
-            color: "#fff",
-            width: "30px",
-            height: "30px",
-          }}
-        >
+        <span className="profile-button__avatar">
           {getImgTextFromName(user.username)}
         </span>
       );
@@ -38,11 +49,22 @@ function ProfileButton() {
   }
 
   return (
-    <div className="ProfileButton">
+    <div className="profile-button" onClick={handleToggleMenu}>
       {getAvatar()}
-      <h2>{user?.username}</h2>
-      <Link to="/profile">Edit</Link>
-      <button onClick={handleLogout}>Log out</button>
+      <div className={classNames('profile-button__menu', {
+        'profile-button__menu--open': isMenuOpen
+      })}>
+        <div className="profile-button__menu-title">
+          <div className="profile-button__menu-title-name">{user?.username}</div>
+          <div className="profile-button__menu-title-email">{user?.email}</div>
+        </div>
+        <Link to="/profile" className="profile-button__menu-item">
+          Profile
+        </Link>
+        <div onClick={handleLogout} className="profile-button__menu-item">
+          Log out
+        </div>
+      </div>
     </div>
   );
 }

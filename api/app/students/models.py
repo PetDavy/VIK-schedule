@@ -7,6 +7,7 @@ class Student(db.Model):
     name = db.Column(db.String(80), nullable=False)
     age = db.Column(db.Integer)
     info = db.Column(db.String(120))
+    contact = db.Column(db.String(120))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # noqa: E501 -  move to special util function later
     user = db.relationship(
       'User',
@@ -14,12 +15,13 @@ class Student(db.Model):
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, name, age, info, user, **kwargs):
+    def __init__(self, name, age, info, contact, user, **kwargs):
         db.Model.__init__(
             self,
             name=name,
             age=age,
             info=info,
+            contact=contact,
             user=user
         )
 

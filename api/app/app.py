@@ -1,6 +1,6 @@
 from flask import Flask
 
-from app import user, students, studentProfile, classesTable
+from app import user, students, studentProfile, classesTable, lesson
 
 from app.extentions import db
 from app.extentions import migrate
@@ -31,11 +31,13 @@ def register_blueprints(app):
     cors.init_app(students.views.blueprint, origins=origins)
     cors.init_app(studentProfile.views.blueprint, origins=origins)
     cors.init_app(classesTable.views.blueprint, origins=origins)
+    cors.init_app(lesson.views.blueprint, origins=origins)
 
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(students.views.blueprint)
     app.register_blueprint(studentProfile.views.blueprint)
     app.register_blueprint(classesTable.views.blueprint)
+    app.register_blueprint(lesson.views.blueprint)
 
 
 def register_errorhandlers(app):

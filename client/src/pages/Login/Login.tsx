@@ -11,13 +11,22 @@ import {
   updateEmail,
   updatePassword,
 } from "./Login.slice";
+import {
+  setStudents,
+  startLoad as startStudentLoad,
+} from "../../components/StudentsList/StudentsList.slice";
 import { loadUser } from "../../components/App/App.slice";
 import { login } from "../../api/api.user";
+import { loadStudents } from "../../api/api.student";
 
 import { useStore } from "../../state/storeHooks";
 
+import '../../assets/styles/login.scss';
+
 function Login() {
-  const [{ user, loggingIn, errors }, dispatch] = useStore(({ login }) => login);
+  const [{ user, loggingIn, errors }, dispatch] = useStore(
+    ({ login }) => login
+  );
 
   const fields = getDefaultFormFields();
 
@@ -31,21 +40,27 @@ function Login() {
 
   async function signIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (loggingIn) {
+      return;
+    }
+
     dispatch(startLoggingIn());
 
     try {
       const userData = await login(user);
 
-      if ('messages' in userData) {
+      if ("messages" in userData) {
         dispatch(failLoggingIn(userData));
       }
 
-      if ('token' in userData) {
-        localStorage.setItem('token', userData.token);
+      if ("token" in userData) {
+        const { token } = userData;
+        localStorage.setItem("token", token);
         dispatch(loadUser(userData));
         dispatch(successLoggingIn());
+        loadUserStudents(token);
       }
-
     } catch (error) {
       console.warn(error);
     } finally {
@@ -53,20 +68,29 @@ function Login() {
     }
   }
 
+  async function loadUserStudents(token: string) {
+    dispatch(startStudentLoad());
+    dispatch(setStudents(await loadStudents(token)));
+  }
+
   return (
-    <div className="Login">
-      Login
-      {loggingIn && <p>Logging in...</p>}
-      <Form
-        fields={fields}
-        formObject={user}
-        errors={errors}
-        buttonText="Login"
-        onChange={updateFileds}
-        onSubmit={signIn}
-      />
-      <GoogleAuth />
-      <Link to="/register">Sign up</Link>
+    <div className="login">
+      <div className="login__container">
+        <h1 className="login__title">
+          Log in
+        </h1>
+        <Form
+          fields={fields}
+          formObject={user}
+          errors={errors}
+          buttonText="Login"
+          onChange={updateFileds}
+          onSubmit={signIn}
+          isLoading={loggingIn}
+        />
+        <GoogleAuth />
+        <Link to="/register">Sign up</Link>
+      </div>
     </div>
   );
 }

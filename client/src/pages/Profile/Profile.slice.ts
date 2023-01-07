@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ResponseErrorType } from "../../api/api";
 import { User } from "../../types/user";
+import { tabType } from "../../types/profile";
 
 interface ProfileState {
   profile: {
@@ -12,6 +13,7 @@ interface ProfileState {
   }
   errors: ResponseErrorType;
   updating: boolean;
+  activeTab: tabType;
 };
 
 const initialState: ProfileState = {
@@ -27,6 +29,7 @@ const initialState: ProfileState = {
     fields: []
   },
   updating: false,
+  activeTab: 'overview',
 };
 
 export const profileSlice = createSlice({
@@ -93,6 +96,9 @@ export const profileSlice = createSlice({
         messages: [],
         fields: [],
       };
+    }),
+    updateActiveTab: ((state: ProfileState, action: PayloadAction<tabType>) => {
+      state.activeTab = action.payload;
     })
   }
 });
@@ -108,6 +114,7 @@ export const {
   updatePicture,
   updatePassword,
   updateNewPassword,
+  updateActiveTab,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

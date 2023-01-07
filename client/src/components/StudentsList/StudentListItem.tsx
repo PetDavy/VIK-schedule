@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Student } from '../../types/student';
+import { Link } from 'react-router-dom';
 
 interface StudentListItemProps {
   student: Student;
@@ -8,11 +9,20 @@ interface StudentListItemProps {
 
 const StudentListItem: FC<StudentListItemProps> = ({ student }) => {
   return (
-    <div className="StudentListItem" style={{display: "flex"}}>
-      name: {student.name}&nbsp;
-      age: {student.age}&nbsp;
-      info: {student.info}
-    </div>
+    <Link to={`/students/${student.id}`} className="studentListItem">
+      <div className="studentListItem__element studentListItem__element--name">
+        {student.name}
+      </div>
+      <div className="studentListItem__element studentListItem__element--age">
+        {student.age}
+      </div>
+      <div className="studentListItem__element studentListItem__element--created">
+        ----
+      </div>
+      <div className="studentListItem__element studentListItem__element--contact">
+        {student.contact}
+      </div>
+    </Link>
   );
 }
 
